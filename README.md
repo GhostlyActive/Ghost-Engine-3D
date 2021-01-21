@@ -1,6 +1,6 @@
 # Ghost-Engine-3D
 
-### Creating a 3D game engine from scratch using the Windows API. Continuing the work of PardCode from Tutorial 11 and redirecting it to a 3D engine adapted to real-time strategy games.
+### Creating a 3D Game Engine from Scratch using the Windows API. Continuing the work of PardCode from Tutorial 11 and redirecting it to a 3D Engine adapted to Real-Time Strategy Games.
 
 Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Window, Swap Chain, Vertex Buffer, Shader, Index Buffer, Transform)
 <br>
