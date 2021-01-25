@@ -42,18 +42,30 @@ SwapChain::SwapChain()
 	  IDXGISwapChain       **ppSwapChain
 	);
 
-	CreateRenderTargetView: Creates a render-target view for accessing resource data
+
+	CreateRenderTargetView: Creates a render-target view for accessing resource data.
 
 	HRESULT CreateRenderTargetView(
 	  ID3D11Resource                      *pResource,
 	  const D3D11_RENDER_TARGET_VIEW_DESC *pDesc,
 	  ID3D11RenderTargetView              **ppRTView
 	);
+
+
+	Create a depth-stencil view for accessing resource data.
+
+	HRESULT CreateDepthStencilView(
+	  ID3D11Resource                      *pResource,
+	  const D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc,
+	  ID3D11DepthStencilView              **ppDepthStencilView
+	);
+
+	
 */
 
 bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 {
-	ID3D11Device*device= GraphicsEngine::get()->m_d3d_device;
+	ID3D11Device*device = GraphicsEngine::get()->m_d3d_device;
 
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
@@ -93,6 +105,43 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 	{
 		return false;
 	}
+
+	/*
+		The depth buffer is just a 2D texture that stores the depth information (and stencil information if using stenciling). To create a texture,
+		we need to fill out a D3D11_TEXTURE2D_DESC structure describing the texture to create, and then call the ID3D11Device::CreateTexture2D method.
+	*/
+
+	D3D11_TEXTURE2D_DESC depth_desc = {};
+
+	depth_desc.Width = width;
+	depth_desc.Height = height;
+	depth_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depth_desc.Usage = D3D11_USAGE_DEFAULT;
+	depth_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depth_desc.MipLevels = 1;
+	depth_desc.SampleDesc.Count = 1;
+	depth_desc.SampleDesc.Quality = 0;
+	depth_desc.MiscFlags = 0;
+	depth_desc.ArraySize = 1;
+	depth_desc.CPUAccessFlags = 0;
+
+
+	hr = device->CreateTexture2D(&depth_desc, nullptr, &buffer);
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+
+	hr = device->CreateDepthStencilView(buffer, NULL, &m_dsv);		// output it in m_dsv
+	buffer->Release();
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
 
 	return true;
 }

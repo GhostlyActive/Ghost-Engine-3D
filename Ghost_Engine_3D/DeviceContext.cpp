@@ -40,10 +40,21 @@ DeviceContext::DeviceContext(ID3D11DeviceContext* device_context):m_device_conte
 
 
 /*
+	Set all the elements in a render target to one value.
+
 	void ClearRenderTargetView(
-	  ID3D11RenderTargetView *pRenderTargetView,	its like the back_buffer. With the help of SwapChain
+	  ID3D11RenderTargetView *pRenderTargetView,	
 	  const FLOAT [4]        ColorRGBA
-	);	
+	);
+
+	Now that we have created views to the back buffer and depth buffer, we can bind these views
+	to the output merger stage of the pipeline to make the resources the render target
+
+	void OMSetRenderTargets(
+	  UINT                   NumViews,
+	  ID3D11RenderTargetView * const *ppRenderTargetViews,
+	  ID3D11DepthStencilView *pDepthStencilView
+	);
 */
 
 void DeviceContext::clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha)
@@ -51,9 +62,10 @@ void DeviceContext::clearRenderTargetColor(SwapChain* swap_chain, float red, flo
 	FLOAT clear_color[] = {red,green,blue,alpha};
 	// private: ID3D11RenderTargetView* m_rtv in SwapChain.cpp -> make Device Context a friend class in SwapChain
 	m_device_context->ClearRenderTargetView(swap_chain->m_rtv, clear_color);
-
+	// Clear the depth buffer to 1.0f and the stencil buffer to 0.
+	m_device_context->ClearDepthStencilView(swap_chain->m_dsv, D3D11_ClEAR_DEPTH)| D3D11_CLEAR_STENCIL, 1.0f, 0);
 	// set Render Target. choose which render target we want to draw
-	m_device_context->OMSetRenderTargets(1, &swap_chain->m_rtv, NULL);
+	m_device_context->OMSetRenderTargets(1, &swap_chain->m_rtv, swap_chain->m_dsv);
 }
 
 void DeviceContext::setVertexBuffer(VertexBuffer * vertex_buffer)

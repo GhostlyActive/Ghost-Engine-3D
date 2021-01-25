@@ -55,7 +55,7 @@ public:
 	void setPixelShader(PixelShader* pixel_shader);
 
 
-	//link ConstantBuffer to the graphics pipeline. Bind it to Pixel and Vertex Shader with overloading
+	// link ConstantBuffer to the graphics pipeline. Bind it to Pixel and Vertex Shader with overloading
 	void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 	void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
 
