@@ -132,6 +132,10 @@ void AppWindow::onCreate()
 	Window::onCreate();
 	GraphicsEngine::get()->init();
 
+	// init inpput
+	m_input = GraphicsEngine::get()->createInput();
+	m_input->init();
+
 	m_swap_chain=GraphicsEngine::get()->createSwapChain();
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
@@ -276,6 +280,16 @@ void AppWindow::onSize()
 		m_swap_chain->Swap_Resize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
+void AppWindow::onKeyDown(unsigned int value)
+{
+	m_input->KeyDown(value);		
+}
+
+void AppWindow::onKeyUp(unsigned int value)
+{
+	m_input->KeyUp(value);
+}
+
 void AppWindow::onDestroy()
 {
 	// call onDestroy in Window
@@ -287,5 +301,6 @@ void AppWindow::onDestroy()
 	m_swap_chain->release();
 	m_vs->release();
 	m_ps->release();
+	m_input->release();
 	GraphicsEngine::get()->release();
 }

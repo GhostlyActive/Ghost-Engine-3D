@@ -34,6 +34,7 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "Input.h"
 
 #include <d3dcompiler.h>
 
@@ -160,6 +161,11 @@ IndexBuffer * GraphicsEngine::createIndexBuffer()
 ConstantBuffer * GraphicsEngine::createConstantBuffer()
 {
 	return new ConstantBuffer();
+}
+
+Input* GraphicsEngine::createInput()
+{
+	return new Input();
 }
 
 

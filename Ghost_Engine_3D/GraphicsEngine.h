@@ -36,6 +36,7 @@ class IndexBuffer;
 class ConstantBuffer;
 class VertexShader;
 class PixelShader;
+class Input;
 
 class GraphicsEngine
 {
@@ -54,6 +55,8 @@ public:
 	ConstantBuffer* createConstantBuffer();
 	VertexShader* createVertexShader(const void* shader_byte_code, size_t byte_code_size);
 	PixelShader* createPixelShader(const void* shader_byte_code, size_t byte_code_size);
+
+	Input* createInput();
 public:
 	bool compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 	bool compilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
@@ -85,6 +88,7 @@ private:
 	friend class ConstantBuffer;
 	friend class VertexShader;			// to use in init function - GraphicsEngine::get()->m_d3d_device->CreateVertexShader
 	friend class PixelShader;
+	friend class Input;
 
 };
 

@@ -81,6 +81,22 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 		break;
 	}
 
+	case WM_KEYDOWN:
+	{
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if (window) window->onKeyDown((unsigned int)wparam);
+		break;
+	}
+
+	case WM_KEYUP:
+	{
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if (window) window->onKeyUp((unsigned int)wparam);
+		break;
+	}
+
 	default:
 		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 	}
@@ -214,6 +230,15 @@ void Window::onDestroy()
 void Window::onSize()
 {
 
+}
+
+void Window::onKeyDown(unsigned int value)
+{
+
+}
+
+void Window::onKeyUp(unsigned int value)
+{
 
 }
 

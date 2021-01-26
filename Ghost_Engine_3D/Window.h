@@ -49,6 +49,8 @@ public:
 	virtual void onUpdate();
 	virtual void onDestroy();
 	virtual void onSize();
+	virtual void onKeyDown(unsigned int value);
+	virtual void onKeyUp(unsigned int value);
 
 	~Window();
 protected:

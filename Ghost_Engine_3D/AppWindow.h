@@ -36,6 +36,7 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "Input.h"
 
 class AppWindow: public Window
 {
@@ -51,13 +52,18 @@ public:
 	virtual void onUpdate() override;
 	virtual void onDestroy() override;
 	virtual void onSize() override;
+	virtual void onKeyDown(unsigned int value) override;
+	virtual void onKeyUp(unsigned int value) override;
+
 private:
-	SwapChain * m_swap_chain;
+	SwapChain* m_swap_chain;
 	VertexBuffer* m_vb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
 	IndexBuffer* m_ib;
+	Input* m_input;
+
 private:
 	long m_old_delta;
 	long m_new_delta;
