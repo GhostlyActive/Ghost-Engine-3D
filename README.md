@@ -4,15 +4,11 @@
 
 Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Window, Swap Chain, Vertex Buffer, Shader, Index Buffer, Transform) and the DirectX book ([Introduction to 3D GAME PROGRAMMING WITH DIRECTX 11](https://files.xray-engine.org/boox/3d_game_programming_with_DirectX11.pdf))
 <br>
+<br> 
+Already done: Depth Buffer, Resizing Window, Project Summary PDF . . .
 <br>
-Current work: Rendering a terrain, Bitmap, Camera system, Texturing, Lighting, Collision, Sound system, Mouse and keyboard, GUI, Storage system . . . 
+Current work: Rendering a Terrain, Bitmap, Camera System, Texturing, Lighting, Collision, Sound System, Mouse and Seyboard, GUI, Storage System . . . 
 
 
 
-<p align="center">
-  <img src="/Media/Cube_1.PNG" width="400" alt="Cube_1">
-  <img src="/Media/Cube_2.PNG" width="402" alt="Cube_2">
-  <img src="/Media/Cube_3.PNG" width="400" alt="Cube_3">
-  <img src="/Media/Cube_4.PNG" width="400" alt="Cube_1">
-</p>
 
