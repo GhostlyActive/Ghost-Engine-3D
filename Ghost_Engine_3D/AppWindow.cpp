@@ -42,7 +42,6 @@ struct vertex
 /*
 	- DirectX handles constant data in VRAM in 16 Bytes, when the structure is above -> modified to be multiple of 16
 		__declspec(align(16)) make it works.
-	
 */
 
 __declspec(align(16))
@@ -61,7 +60,6 @@ AppWindow::AppWindow()
 
 void AppWindow::updateQuadPosition()
 {
-
 	// getTickCount is a Windows function. output the time since the start of the system in milliseconds
 	constant cc;
 	cc.m_time = ::GetTickCount();
@@ -74,7 +72,7 @@ void AppWindow::updateQuadPosition()
 	// translation matrix
 	Matrix4x4 temp;
 
-	m_delta_scale += m_delta_time / 0.55f;
+	m_delta_scale += m_delta_time / 0.55f;	// last value makes the movement slower. Like 1 unit in x seconds
 
 	/*
 		commented block: combine scale with translation matrix
@@ -92,8 +90,6 @@ void AppWindow::updateQuadPosition()
 	//cc.m_world *= temp;
 
 
-
-
 	cc.m_world.setScale(Vector3D(1, 1, 1));		// front face of cube
 
 	temp.setIdentity();					
@@ -104,11 +100,9 @@ void AppWindow::updateQuadPosition()
 	temp.setRotationY(m_delta_scale);
 	cc.m_world *= temp;
 
-	temp.setIdentity();
-	temp.setRotationX(m_delta_scale);
-	cc.m_world *= temp;
-
-
+	//temp.setIdentity();
+	//temp.setRotationX(m_delta_scale);
+	//cc.m_world *= temp;
 
 
 
@@ -236,7 +230,7 @@ void AppWindow::onUpdate()
 
 	// clear the render target
 	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
-		1, 0.0f,0.0f, 1);
+		0.0f, 0.0f,0.0f, 1);
 
 	// set viewport of render target in which we have to draw 
 	RECT rc = this->getClientWindowRect();
@@ -272,6 +266,14 @@ void AppWindow::onUpdate()
 
 	// aligned condition. For beginning when all delta would be zero
 	m_delta_time = (m_old_delta)?((m_new_delta - m_old_delta) / 1000.0f):0;
+}
+
+
+
+void AppWindow::onSize()
+{
+		RECT rc = this->getClientWindowRect();
+		m_swap_chain->Swap_Resize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
 void AppWindow::onDestroy()

@@ -63,7 +63,7 @@ void DeviceContext::clearRenderTargetColor(SwapChain* swap_chain, float red, flo
 	// private: ID3D11RenderTargetView* m_rtv in SwapChain.cpp -> make Device Context a friend class in SwapChain
 	m_device_context->ClearRenderTargetView(swap_chain->m_rtv, clear_color);
 	// Clear the depth buffer to 1.0f and the stencil buffer to 0.
-	m_device_context->ClearDepthStencilView(swap_chain->m_dsv, D3D11_ClEAR_DEPTH)| D3D11_CLEAR_STENCIL, 1.0f, 0);
+	m_device_context->ClearDepthStencilView(swap_chain->m_dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	// set Render Target. choose which render target we want to draw
 	m_device_context->OMSetRenderTargets(1, &swap_chain->m_rtv, swap_chain->m_dsv);
 }

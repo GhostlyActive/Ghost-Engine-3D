@@ -33,6 +33,21 @@ SwapChain::SwapChain()
 {
 }
 
+
+/*
+	ResizeBuffers to handle window resizing. Before you have to release of references of swap chain's Buffer.
+*/
+
+void SwapChain::Swap_Resize(UINT width, UINT height)
+{
+	// release the views
+	m_rtv->Release();
+	m_dsv->Release();
+
+	m_swap_chain->ResizeBuffers(0, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+
+	LoadViews(width, height);
+}
 /*
 	SwapChain: Collection of frame buffers to show render frames on the screen. Double Buffering technique is used here. Back_buffer is copied to front Buffer/output Window. Present Fraction is used to flip it.
 
@@ -156,6 +171,69 @@ bool SwapChain::present(bool vsync)
 
 	return true;
 }
+
+
+bool SwapChain::LoadViews(UINT width, UINT height)
+{
+	 ID3D11Device* device = GraphicsEngine::get()->m_d3d_device;
+
+	// get the back buffer color and create its render target view
+	ID3D11Texture2D* buffer = NULL;
+	HRESULT hr = m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);		// we get a texture
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	hr = device->CreateRenderTargetView(buffer, NULL, &m_rtv);		// output it in m_rtv
+	buffer->Release();
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	/*
+		The depth buffer is just a 2D texture that stores the depth information (and stencil information if using stenciling). To create a texture,
+		we need to fill out a D3D11_TEXTURE2D_DESC structure describing the texture to create, and then call the ID3D11Device::CreateTexture2D method.
+	*/
+
+	D3D11_TEXTURE2D_DESC depth_desc = {};
+
+	depth_desc.Width = width;
+	depth_desc.Height = height;
+	depth_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depth_desc.Usage = D3D11_USAGE_DEFAULT;
+	depth_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depth_desc.MipLevels = 1;
+	depth_desc.SampleDesc.Count = 1;
+	depth_desc.SampleDesc.Quality = 0;
+	depth_desc.MiscFlags = 0;
+	depth_desc.ArraySize = 1;
+	depth_desc.CPUAccessFlags = 0;
+
+
+	hr = device->CreateTexture2D(&depth_desc, nullptr, &buffer);
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+
+	hr = device->CreateDepthStencilView(buffer, NULL, &m_dsv);		// output it in m_dsv
+	buffer->Release();
+
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
 
 bool SwapChain::release()
 {

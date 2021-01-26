@@ -50,6 +50,7 @@ public:
 	virtual void onCreate() override;
 	virtual void onUpdate() override;
 	virtual void onDestroy() override;
+	virtual void onSize() override;
 private:
 	SwapChain * m_swap_chain;
 	VertexBuffer* m_vb;

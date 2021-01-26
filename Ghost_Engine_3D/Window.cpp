@@ -43,7 +43,6 @@ Window::Window()
 
 LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	
 	switch (msg)
 	{
 
@@ -71,6 +70,14 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 		// call the destroy event
 		window->onDestroy();
 		::PostQuitMessage(0);
+		break;
+	}
+
+	case WM_SIZE:
+	{
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if(window) window->onSize();
 		break;
 	}
 
@@ -116,7 +123,7 @@ bool Window::init()
 
 	// creation of the window
 	m_hwnd=::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, "MyWindowClass", "Ghost Engine 3D", 
-		WS_CAPTION|WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT, 1024, 768,
+		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1024, 768,
 		NULL, NULL, NULL, this);
 
 	// if the creation fail return false
@@ -202,6 +209,12 @@ void Window::onUpdate()
 void Window::onDestroy()
 {
 	m_is_run = false;
+}
+
+void Window::onSize()
+{
+
+
 }
 
 Window::~Window()

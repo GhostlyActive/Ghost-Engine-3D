@@ -37,6 +37,10 @@ public:
 	// Initialize SwapChain for a window
 	bool init(HWND hwnd,UINT width,UINT height);
 
+	// Resize swap chain when window size is changed
+	void Swap_Resize(UINT width, UINT height);
+	bool LoadViews(UINT width, UINT height);
+
 	bool present(bool vsync);
 
 	// Release the swap chain
