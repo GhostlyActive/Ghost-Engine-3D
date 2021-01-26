@@ -7,8 +7,15 @@ Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Wi
 <br> 
 Already done: Depth Buffer, Resizing Window, Project Summary PDF . . .
 <br>
+<br>
 Current work: Rendering a Terrain, Bitmap, Camera System, Texturing, Lighting, Collision, Sound System, Mouse and Seyboard, GUI, Storage System . . . 
+<br>
 
 
 
-
+<p align="center">
+  <img src="/Media/Cube_1.PNG" width="400" alt="Cube_1">
+  <img src="/Media/Pyramid_1.PNG" width="400" alt="Pyramid_1">
+  <img src="/Media/Cube_4.PNG" width="400" alt="Cube_4">
+  <img src="/Media/Pyramid_2.PNG" width="400" alt="Pyramid2">
+</p>
