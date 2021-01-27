@@ -53,13 +53,19 @@ void Input::KeyUp(unsigned int value)
 	m_keys[value] = 0;
 }
 
+
+void Input::MouseDown(int posX, int posY)
+{
+	Beep(posX*posY, 3);
+}
+
+
 bool Input::release()
 {
 	delete this;
 
 	return true;
 }
-
 
 Input::~Input()
 {

@@ -28,6 +28,7 @@
 
 #pragma once
 #include <Windows.h>
+#include <windowsx.h>
 
 class Window
 {
@@ -51,6 +52,7 @@ public:
 	virtual void onSize();
 	virtual void onKeyDown(unsigned int value);
 	virtual void onKeyUp(unsigned int value);
+	virtual void onMouseDown(int posX, int posY);
 
 	~Window();
 protected:

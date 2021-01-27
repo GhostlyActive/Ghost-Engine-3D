@@ -54,6 +54,7 @@ public:
 	virtual void onSize() override;
 	virtual void onKeyDown(unsigned int value) override;
 	virtual void onKeyUp(unsigned int value) override;
+	virtual void onMouseDown(int posX, int posY) override;
 
 private:
 	SwapChain* m_swap_chain;

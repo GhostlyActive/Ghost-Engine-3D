@@ -36,6 +36,8 @@ public:
 	void KeyDown(unsigned int value);
 	void KeyUp(unsigned int value);
 
+	void MouseDown(int posX, int posY);
+
 	bool release();
 	~Input();
 

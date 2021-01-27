@@ -290,6 +290,11 @@ void AppWindow::onKeyUp(unsigned int value)
 	m_input->KeyUp(value);
 }
 
+void AppWindow::onMouseDown(int posX, int posY)
+{
+	m_input->MouseDown(posX, posY);
+}
+
 void AppWindow::onDestroy()
 {
 	// call onDestroy in Window

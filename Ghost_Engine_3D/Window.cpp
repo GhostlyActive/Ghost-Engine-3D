@@ -97,6 +97,27 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 		break;
 	}
 
+	case WM_GETMINMAXINFO:
+	{
+		// minimal resizing of the window 
+		int x = 400;
+		int y = 400;
+		((MINMAXINFO*)lparam)->ptMinTrackSize.x = x;
+		((MINMAXINFO*)lparam)->ptMinTrackSize.y = y;
+
+		break;
+	}
+
+	case WM_LBUTTONDOWN:
+	{
+		int xPos = GET_X_LPARAM(lparam);
+		int yPos = GET_Y_LPARAM(lparam);
+
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if (window) window->onMouseDown(xPos, yPos);
+	}
+
 	default:
 		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 	}
@@ -238,6 +259,11 @@ void Window::onKeyDown(unsigned int value)
 }
 
 void Window::onKeyUp(unsigned int value)
+{
+
+}
+
+void Window::onMouseDown(int posX, int posY)
 {
 
 }
