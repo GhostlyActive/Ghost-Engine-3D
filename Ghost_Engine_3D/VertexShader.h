@@ -42,7 +42,7 @@ public:
 private:
 	bool init(const void* shader_byte_code, size_t byte_code_size);
 private:
-	ID3D11VertexShader * m_vs;			//output variable
+	ID3D11VertexShader* m_vs;			//output variable
 private:
 	friend class GraphicsEngine;		// want to use vertexShader::init function
 	friend class DeviceContext;

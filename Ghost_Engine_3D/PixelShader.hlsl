@@ -25,8 +25,10 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
 */
-
-// output of VertexShader.hlsl -> input of PixelShader
+/*
+	Takes output of the vertex shader. It draws each pixel on the polygon that will be
+	rendered on screen.
+*/
 struct PS_INPUT
 {
 	float4 position: SV_POSITION;

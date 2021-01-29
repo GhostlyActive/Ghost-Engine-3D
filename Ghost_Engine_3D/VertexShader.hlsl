@@ -26,6 +26,11 @@
 	SOFTWARE.
 */
 
+/*
+	vertex shader called by the GPU. It process data from Vertex
+	buffer and is called for every vertex. Input match the data format in 
+	the vertex buffer. Output will be send to pixel shader (VS_Output)
+*/
 struct VS_INPUT
 {
 	float4 position: POSITION;
@@ -40,7 +45,7 @@ struct VS_OUTPUT
 	float3 color1: COLOR1;
 };
 
-// Adding Data Structure passed into ConstantBuffer
+// adding Data Structure passed into ConstantBuffer
 cbuffer constant: register(b0)
 {
 	row_major float4x4 m_world;
@@ -50,18 +55,20 @@ cbuffer constant: register(b0)
 };
 
 
+/*
+	takes position of the input vertex and multiplies with the world, view and projection matrices to locate it for rendering in the 3D 
+	space and onto 2D screen
+*/
 
 VS_OUTPUT vsmain(VS_INPUT input)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
-	
-//	output.position = lerp(input.position, input.position1, (float)((sin((float)(m_time / (float)1000.0f)) + 1.0f) / 2.0f));
-	
-	//WORLD SPACE
+		
+	// world space
 	output.position = mul(input.position, m_world);
-	//VIEW SPACE
+	// view space
 	output.position = mul(output.position, m_view);
-	//SCREEN SPACE
+	// screen space
 	output.position = mul(output.position, m_proj);
 
 

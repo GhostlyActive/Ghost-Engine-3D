@@ -40,7 +40,7 @@ class DeviceContext
 {
 public:
 	DeviceContext(ID3D11DeviceContext* device_context);
-	void clearRenderTargetColor(SwapChain* swap_chain,float red, float green, float blue, float alpha);
+	void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
 	void setVertexBuffer(VertexBuffer* vertex_buffer);
 	void setIndexBuffer(IndexBuffer* index_buffer);
 
@@ -59,11 +59,10 @@ public:
 	void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 	void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
 
-
 	bool release();
 	~DeviceContext();
 private:
-	ID3D11DeviceContext * m_device_context;
+	ID3D11DeviceContext* m_device_context;
 private:
 	friend class ConstantBuffer;
 };

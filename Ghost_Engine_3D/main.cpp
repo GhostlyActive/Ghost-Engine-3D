@@ -28,8 +28,6 @@
 
 #include "AppWindow.h"
 
-
-
 int main()
 {
 	AppWindow app;

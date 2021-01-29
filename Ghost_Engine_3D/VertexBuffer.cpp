@@ -29,7 +29,6 @@
 #include "VertexBuffer.h"
 #include "GraphicsEngine.h"
 
-
 VertexBuffer::VertexBuffer():m_layout(0),m_buffer(0)
 {
 }
@@ -53,9 +52,9 @@ VertexBuffer::VertexBuffer():m_layout(0),m_buffer(0)
 		Describe and define attributes of vertex type. Information about the attributes that we compose our vertex type
 */
 
-bool VertexBuffer::load(void* list_vertices,UINT size_vertex,UINT size_list,void*shader_byte_code,size_t size_byte_shader)
+bool VertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, size_t size_byte_shader)
 {
-	//release these to create new ones
+	// release these to create new ones
 	if (m_buffer)m_buffer->Release();
 	if (m_layout)m_layout->Release();
 
@@ -79,13 +78,17 @@ bool VertexBuffer::load(void* list_vertices,UINT size_vertex,UINT size_list,void
 		return false;
 	}
 
-	// have to add offset of 12 Bytes, because of all previous attributes. Third position has offset of 24. 12*2 of previous. "position", 1 -> replaced with other technique
+	/*
+		this is the layout of the vertex data that will be processed by the shader.
+		AlignedByteOffset indicates how the data is spaced in the buffer. First position needs 12 Bytes of space. Next one added 12 or 16 Bytes. D3D11_APPEND_ALIGNED_ELEMENT makes it automatically
+	*/
+
 	D3D11_INPUT_ELEMENT_DESC layout[]=
 	{
 		//SEMANTIC NAME - SEMANTIC INDEX - FORMAT - INPUT SLOT - ALIGNED BYTE OFFSET - INPUT SLOT CLASS - INSTANCE DATA STEP RATE
-		{"POSITION", 0,  DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,D3D11_INPUT_PER_VERTEX_DATA ,0},
-		{ "COLOR", 0,  DXGI_FORMAT_R32G32B32_FLOAT, 0, 12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
-		{ "COLOR", 1,  DXGI_FORMAT_R32G32B32_FLOAT, 0, 24,D3D11_INPUT_PER_VERTEX_DATA ,0 }
+		{"POSITION", 0,  DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{ "COLOR", 0,  DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA , 0},
+		{ "COLOR", 1,  DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA , 0}
 	};
 	
 	UINT size_layout = ARRAYSIZE(layout);
@@ -107,7 +110,7 @@ bool VertexBuffer::release()
 {
 	m_layout->Release();
 	m_buffer->Release();
-	delete this;			//return new VertexBuffer();
+	delete this;			// because "return new VertexBuffer();"
 	return true;
 }
 

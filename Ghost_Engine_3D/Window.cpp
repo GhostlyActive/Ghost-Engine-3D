@@ -49,7 +49,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 	case WM_CREATE:
 	{
 		// event fired when the window is created
-		//  get "this" pointer passed in CreateWindowEx
+		// get "this" pointer passed in CreateWindowEx
 		Window* window = (Window*)((LPCREATESTRUCT)lparam)->lpCreateParams;
 
 		// save pointer "this" in structure data HWND

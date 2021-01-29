@@ -132,7 +132,7 @@ void AppWindow::onCreate()
 	Window::onCreate();
 	GraphicsEngine::get()->init();
 
-	// init inpput
+	// init input
 	m_input = GraphicsEngine::get()->createInput();
 	m_input->init();
 
@@ -234,7 +234,7 @@ void AppWindow::onUpdate()
 
 	// clear the render target
 	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
-		0.0f, 0.0f,0.0f, 1);
+		0.0f, 0.0f, 0.0f, 1);
 
 	// set viewport of render target in which we have to draw 
 	RECT rc = this->getClientWindowRect();
@@ -247,7 +247,7 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
 
-	// set default shader in the graphics pipeline to be able to draw
+	// set shader in the graphics pipeline to be able to draw
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(m_vs);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(m_ps);
 
@@ -258,8 +258,9 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib);
 
 
+
 	// finally draw the triangle
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(),0, 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
 	m_swap_chain->present(true);
 
 
