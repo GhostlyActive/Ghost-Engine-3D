@@ -36,3 +36,6 @@ Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/bbf2850d9f72b466/INPUT.ipch
 Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/c8e87811f4783fe1/APPWINDOW.ipch
 Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/c912287177017f69/MAIN.ipch
 Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/fea5acfc6847e65f/DEVICECONTEXT.ipch
+Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/4dbfdb037e8e567b/GRAPHICSENGINE.ipch
+Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/553ef40b8bd347b0/TEXTURESHADER.ipch
+Ghost_Engine_3D/x64/Debug/TextureShader.obj

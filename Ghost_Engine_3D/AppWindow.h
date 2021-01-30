@@ -38,6 +38,7 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "Input.h"
+#include "TextureShader.h"
 
 class AppWindow: public Window
 {
@@ -65,6 +66,7 @@ private:
 	ConstantBuffer* m_cb;
 	IndexBuffer* m_ib;
 	Input* m_input;
+	TextureShader* m_ts;
 
 private:
 	long m_old_delta;

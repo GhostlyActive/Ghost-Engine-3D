@@ -35,6 +35,7 @@ class IndexBuffer;
 class ConstantBuffer;
 class VertexShader;
 class PixelShader;
+class TextureShader;
 
 class DeviceContext
 {
@@ -58,6 +59,8 @@ public:
 	// link ConstantBuffer to the graphics pipeline. Bind it to Pixel and Vertex Shader with overloading
 	void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 	void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
+
+	void setTextureShader(TextureShader* texture_shader);
 
 	bool release();
 	~DeviceContext();

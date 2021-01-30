@@ -33,6 +33,7 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "TextureShader.h"
 
 DeviceContext::DeviceContext(ID3D11DeviceContext* device_context):m_device_context(device_context)
 {
@@ -144,6 +145,12 @@ void DeviceContext::setPixelShader(PixelShader* pixel_shader)
 	  ID3D11Buffer * const *ppConstantBuffers
 	);
 */
+
+
+void DeviceContext::setTextureShader(TextureShader* texture_shader) 
+{
+	m_device_context->PSSetShaderResources(0, 1, &texture_shader->m_ts);
+}
 
 void DeviceContext::setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer)
 {

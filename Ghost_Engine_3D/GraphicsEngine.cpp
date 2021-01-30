@@ -35,6 +35,7 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "Input.h"
+#include "TextureShader.h"
 
 #include <d3dcompiler.h>
 
@@ -199,6 +200,20 @@ PixelShader * GraphicsEngine::createPixelShader(const void * shader_byte_code, s
 
 	return ps;
 }
+
+TextureShader* GraphicsEngine::createTextureShader(const wchar_t* file)
+{
+	TextureShader* ts = new TextureShader();
+
+	if (!ts->init(file))
+	{
+		ts->release();
+		return nullptr;
+	}
+
+	return ts;
+}
+
 
 /*
 	1. #include <d3dcompiler.h>   -> allow us to compile our shader code

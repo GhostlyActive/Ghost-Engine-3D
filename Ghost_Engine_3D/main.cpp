@@ -30,6 +30,13 @@
 
 int main()
 {
+	// CoInit and passing NULL. If failed then its running again. In the Documentation of "CreateWICTextureFromFile -> "library assumes that the client code will have already called CoInitialize
+	HRESULT hr = CoInitialize(NULL);
+	if (FAILED(hr))
+	{
+		return -1;
+	}
+
 	AppWindow app;
 	if (app.init())
 	{

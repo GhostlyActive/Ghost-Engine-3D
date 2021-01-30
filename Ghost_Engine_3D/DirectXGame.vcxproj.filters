@@ -40,6 +40,9 @@
     <Filter Include="GameEngine\WindowingSystem\InputSystem">
       <UniqueIdentifier>{2b141c8f-e9d3-46cc-870f-cd1d5c453195}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\TextureShader">
+      <UniqueIdentifier>{2ca9621c-0e4a-4242-9daa-38c300619ff1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>GameEngine\WindowingSystem\InputSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShader.cpp">
+      <Filter>GameEngine\GraphicsEngine\TextureShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>GameEngine\WindowingSystem\InputSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureShader.h">
+      <Filter>GameEngine\GraphicsEngine\TextureShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2D.h">
+      <Filter>GameEngine\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
