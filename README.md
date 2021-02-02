@@ -8,12 +8,13 @@ Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Wi
 Already done: Texture, Camera Movement, Input System (Keyboard and Mouse), Resizing Window, Depth Buffer, Project Summary PDF . . .
 <br>
 <br>
-Current work: Rendering a Terrain, Bitmap, Camera System, Lighting, Collision, Sound System, GUI, Storage System . . . 
+Current work: Rendering a Terrain, Bitmap, better Camera System, Lighting, Collision, Sound System, GUI, Storage System . . . 
 <br>
 
 
 
 <p align="center">
+  <img src="/Media/Ghost-Engine-3D-Showcase.gif" width="800" alt="Showcase">
   <img src="/Media/Cube_Texture.PNG" width="400" alt="Cube_Texture">
   <img src="/Media/Cube_1.PNG" width="400" alt="Cube_1">
   <img src="/Media/Cube_4.PNG" width="400" alt="Cube_4">
