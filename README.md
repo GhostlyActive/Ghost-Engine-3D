@@ -5,7 +5,7 @@
 Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Window, Swap Chain, Vertex Buffer, Shader, Index Buffer, Transform) and the DirectX book ([Introduction to 3D GAME PROGRAMMING WITH DIRECTX 11](https://files.xray-engine.org/boox/3d_game_programming_with_DirectX11.pdf))
 <br>
 <br> 
-Already done: Texture, Input System (Keyboard and Mouse), Resizing Window, Depth Buffer, Project Summary PDF . . .
+Already done: Texture, Camera Movement, Input System (Keyboard and Mouse), Resizing Window, Depth Buffer, Project Summary PDF . . .
 <br>
 <br>
 Current work: Rendering a Terrain, Bitmap, Camera System, Lighting, Collision, Sound System, GUI, Storage System . . . 

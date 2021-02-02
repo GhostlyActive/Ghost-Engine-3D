@@ -100,7 +100,6 @@ void DeviceContext::drawIndexedTriangleList(UINT index_count, UINT start_vertex_
 	m_device_context->DrawIndexed(index_count, start_index_location, start_vertex_index);
 }
 
-
 /*
 	4 vertices for one quad when using drawTriangleStrip
 */

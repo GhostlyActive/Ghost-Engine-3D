@@ -58,7 +58,7 @@ AppWindow::AppWindow()
 {
 }
 
-void AppWindow::updateQuadPosition()
+void AppWindow::updateTransform()
 {
 	// getTickCount is a Windows function. output the time since the start of the system in milliseconds
 	constant cc;
@@ -72,7 +72,7 @@ void AppWindow::updateQuadPosition()
 	// translation matrix
 	Matrix4x4 temp;
 
-	m_delta_scale += m_delta_time / 0.55f;	// last value makes the movement slower. Like 1 unit in x seconds
+	m_delta_scale += m_delta_time / 0.6f;	// last value makes the movement slower. Like 1 unit in x seconds
 
 	/*
 		commented block: combine scale with translation matrix
@@ -90,15 +90,15 @@ void AppWindow::updateQuadPosition()
 	//cc.m_world *= temp;
 
 
-	cc.m_world.setScale(Vector3D(1, 1, 1));		// front face of cube
+	//cc.m_world.setScale(Vector3D(1, 1, 1));		// front face of cube
 
-	temp.setIdentity();					
-	temp.setRotationZ(m_delta_scale);
-	cc.m_world *= temp;							// multiplicate with world metrics
+	//temp.setIdentity();					
+	//temp.setRotationZ(m_delta_scale);
+	//cc.m_world *= temp;							// multiplicate with world metrics
 
-	temp.setIdentity();
-	temp.setRotationY(m_delta_scale);
-	cc.m_world *= temp;
+	//temp.setIdentity();
+	//temp.setRotationY(m_delta_scale);
+	//cc.m_world *= temp;
 
 	//temp.setIdentity();
 	//temp.setRotationX(m_delta_scale);
@@ -106,8 +106,37 @@ void AppWindow::updateQuadPosition()
 
 
 
-	cc.m_view.setIdentity();
+	cc.m_world.setIdentity();
 
+	// camera matrix
+	Matrix4x4 world_cam;
+	world_cam.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(m_rot_x);
+
+	// multiply with camera matrix
+	world_cam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(m_rot_y);
+	world_cam *= temp;
+
+	// translate camera backward of two points long the axis. With offset of 2. (left-right, up-down, forward-backward)			
+	world_cam.setTranslation(Vector3D(m_horizontal, m_vertical, m_forward));
+
+
+
+	// camera matrix should be a view matrix by inverting
+	world_cam.inverse();
+
+	// fill constant buffer with world matrix of cube which is identity matrix
+	cc.m_view = world_cam;
+
+
+
+
+	/*
 	// pass the size of the window for the projection
 	cc.m_proj.setOrthoLH
 	(
@@ -116,6 +145,14 @@ void AppWindow::updateQuadPosition()
 		-4.0f,
 		4.0f
 	);
+	*/
+
+	float height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
+	float width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
+
+	cc.m_proj.setPerspectiveFovLH(1.6f, (width / height), 0.1f, 100.0f);
+
+
 
 	// pass it to the Constant buffer update function
 	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
@@ -136,7 +173,7 @@ void AppWindow::onCreate()
 	m_input = GraphicsEngine::get()->createInput();
 	m_input->init();
 
-
+	// create Texture from file 
 	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\ghosty.jpg");
 
 
@@ -144,7 +181,18 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
-	// list of vertices
+
+
+
+
+	/*
+		next part is an example of a cube where we define vertices(position, Texture coordinates) in drawIndexedTriangleList mode
+	
+	*/
+
+
+
+	// list of vertices (positions)
 	Vector3D position_list[] =
 	{
 		{ Vector3D(-0.5f,-0.5f,-0.5f)},
@@ -159,6 +207,7 @@ void AppWindow::onCreate()
 		{ Vector3D(-0.5f,-0.5f,0.5f) }
 	};
 
+	// texture coordinates (u,v) (0,0) -> top left corner and (1,1) -> down right corner
 	Vector2D texcoord_list[] =
 	{
 		{ Vector2D(0.0f,0.0f) },
@@ -167,6 +216,7 @@ void AppWindow::onCreate()
 		{ Vector2D(1.0f,1.0f) }
 	};
 
+	// thats the final list
 	vertex vertex_list[] =
 	{
 		//X - Y - Z
@@ -288,7 +338,7 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
 	// include timer for transform and animation
-	updateQuadPosition();
+	updateTransform();
 
 	// bind constant buffer to the graphics pipeline for each shader (overloading)
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
@@ -309,7 +359,7 @@ void AppWindow::onUpdate()
 
 
 
-	// finally draw the triangle
+	// finally draw triangles
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
 	m_swap_chain->present(true);
 
@@ -333,7 +383,67 @@ void AppWindow::onSize()
 
 void AppWindow::onKeyDown(unsigned int value)
 {
-	m_input->KeyDown(value);		
+	m_input->KeyDown(value);	
+
+	if (value == 'O') 
+	{
+		m_rot_y -= 3.141 * m_delta_time;
+	}
+
+	if (value == 'P') 
+	{
+		m_rot_y += 3.141 * m_delta_time;
+	}
+
+	if (value == 'I') 
+	{
+		m_rot_x -= 3.141 * m_delta_time;
+	}
+
+	if (value == 'K') 
+	{
+		m_rot_x += 3.141 * m_delta_time;
+	}
+
+	if (value == 'W') 
+	{
+		//m_forward += 3.141 * m_delta_time;
+		m_forward += cosf(m_rot_y) *3.141 * m_delta_time;
+		m_horizontal += sinf(m_rot_y) * 3.141 * m_delta_time;
+	}
+
+	if (value == 'S')
+	{
+		//m_forward -= 3.141 * m_delta_time;
+		m_forward -= cosf(m_rot_y) * 3.141 * m_delta_time;
+		m_horizontal -= sinf(m_rot_y) * 3.141 * m_delta_time;
+	}
+
+	if (value == 'A')
+	{
+
+		m_forward += sinf(m_rot_y) * 3.141 * m_delta_time;
+		m_horizontal -= cosf(m_rot_y) * 3.141 * m_delta_time;
+	}
+
+	if (value == 'D')
+	{
+		//m_horizontal += 3.141 * m_delta_time;
+		m_forward -= sinf(m_rot_y) * 3.141 * m_delta_time;
+		m_horizontal += cosf(m_rot_y) * 3.141 * m_delta_time;
+	}
+
+	if (value == 'Q')
+	{
+		m_vertical += 3.141 * m_delta_time;
+	}
+
+	if (value == 'Y')
+	{
+		m_vertical -= 3.141 * m_delta_time;
+	}
+
+
 }
 
 void AppWindow::onKeyUp(unsigned int value)
@@ -344,6 +454,7 @@ void AppWindow::onKeyUp(unsigned int value)
 void AppWindow::onMouseDown(int posX, int posY)
 {
 	m_input->MouseDown(posX, posY);
+
 }
 
 void AppWindow::onDestroy()

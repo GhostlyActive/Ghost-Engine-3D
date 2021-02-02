@@ -36,7 +36,7 @@ TextureShader::TextureShader()
 
 /*
 	with the help of https://github.com/microsoft/DirectXTex/wiki/CreateTexture
-	- create direct3D resource from a set of images.
+	- create direct3D resource from a set of images
 */
 bool TextureShader::init(const wchar_t* file)
 {
