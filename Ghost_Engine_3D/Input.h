@@ -26,23 +26,69 @@
 
 #pragma once
 #include "Window.h"
+#include <math.h>
 
 class Input
 {
 public:
 
 	Input();
-	bool init();
+	~Input();
+
 	void KeyDown(unsigned int value);
 	void KeyUp(unsigned int value);
-
 	void MouseDown(int posX, int posY);
 
-	bool release();
-	~Input();
+	void Update(float time);
+
+	// transform and rotation movement
+	void ForwardMove(float time);
+	void BackwardMove(float time);
+	void HorizontalLeftMove(float time);
+	void HorizontalRightMove(float time);
+	void UpMove(float time);
+	void DownMove(float time);
+	void LeftRotateMove(float time);
+	void RightRotateMove(float time);
+	void UpRotateMove(float time);
+	void DownRotateMove(float time);
+
+	// getter of positions
+	float getRotX();
+	float getRotY();
+	float getPosX();
+	float getPosY();
+	float getPosZ();
 
 private:
 
 	bool m_keys[256];
+
+private:
+
+	// position of the camera
+	float m_posX = 1.0f;
+	float m_posY = 0.0f;
+	float m_posZ = -2.0f;
+
+	float m_rotX = 0.0f;
+	float m_rotY = 0.0f;
+	float m_rotZ = 0.0f;
+
+	// rotation speed
+	float m_rotLeftSpeed = 0.0f;
+	float m_rotRightSpeed = 0.0f;
+	float m_rotUpSpeed = 0.0f;
+	float m_rotDownSpeed = 0.0f;
+
+
+	// transform speed
+	float m_forwardSpeed = 0.0f;
+	float m_backwardSpeed = 0.0f;
+	float m_horizontalLeftSpeed = 0.0f;
+	float m_horizontalRightSpeed = 0.0f;
+	float m_UpSpeed = 0.0f;
+	float m_DownSpeed = 0.0f;
+
 };
 

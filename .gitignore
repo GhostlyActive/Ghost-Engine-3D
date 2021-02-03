@@ -40,3 +40,6 @@ Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/4dbfdb037e8e567b/GRAPHICSENGINE
 Ghost_Engine_3D/.vs/DirectXGame/v16/ipch/AutoPCH/553ef40b8bd347b0/TEXTURESHADER.ipch
 Ghost_Engine_3D/x64/Debug/TextureShader.obj
 *.ipch
+*.db-shm
+*.db-wal
+*.opendb

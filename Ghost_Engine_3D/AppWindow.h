@@ -76,15 +76,5 @@ private:
 	float m_delta_pos;
 	float m_delta_scale;
 	float m_delta_rot;
-
-
-private:
-	float m_rot_x = 0.0f;
-	float m_rot_y = 0.0f;
-
-	
-	float m_forward = -2.0f;
-	float m_horizontal = 1.0f;
-	float m_vertical = 0.0f;
 };
 

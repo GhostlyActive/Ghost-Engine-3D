@@ -74,36 +74,6 @@ void AppWindow::updateTransform()
 
 	m_delta_scale += m_delta_time / 0.6f;	// last value makes the movement slower. Like 1 unit in x seconds
 
-	/*
-		commented block: combine scale with translation matrix
-		1. cc.m_world.setScale()	->	scale in sinus
-		2. temp.setTranslation()	->	set translation matrix
-		3. cc.m_world *= temp		->	multiply the scale matrix with translation matrix
-
-		- order of multiplication is important (scale * translation)
-	*/
-
-	//cc.m_world.setScale(Vector3D::lerp(Vector3D(0.5, 0.5, 0), Vector3D(1.0f, 1.0f, 0), (sin(m_delta_scale) + 1.0f) / 2.0f));
-	
-	//temp.setTranslation(Vector3D::lerp(Vector3D(-1.5f, -1.5f, 0), Vector3D(1.5f,1.5f, 0), m_delta_pos));
-
-	//cc.m_world *= temp;
-
-
-	//cc.m_world.setScale(Vector3D(1, 1, 1));		// front face of cube
-
-	//temp.setIdentity();					
-	//temp.setRotationZ(m_delta_scale);
-	//cc.m_world *= temp;							// multiplicate with world metrics
-
-	//temp.setIdentity();
-	//temp.setRotationY(m_delta_scale);
-	//cc.m_world *= temp;
-
-	//temp.setIdentity();
-	//temp.setRotationX(m_delta_scale);
-	//cc.m_world *= temp;
-
 
 
 	cc.m_world.setIdentity();
@@ -113,17 +83,17 @@ void AppWindow::updateTransform()
 	world_cam.setIdentity();
 
 	temp.setIdentity();
-	temp.setRotationX(m_rot_x);
+	temp.setRotationX(m_input->getRotX());
 
 	// multiply with camera matrix
 	world_cam *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(m_rot_y);
+	temp.setRotationY(m_input->getRotY());
 	world_cam *= temp;
 
 	// translate camera backward of two points long the axis. With offset of 2. (left-right, up-down, forward-backward)			
-	world_cam.setTranslation(Vector3D(m_horizontal, m_vertical, m_forward));
+	world_cam.setTranslation(Vector3D(m_input->getPosX(), m_input->getPosY(), m_input->getPosZ()));
 
 
 
@@ -132,20 +102,6 @@ void AppWindow::updateTransform()
 
 	// fill constant buffer with world matrix of cube which is identity matrix
 	cc.m_view = world_cam;
-
-
-
-
-	/*
-	// pass the size of the window for the projection
-	cc.m_proj.setOrthoLH
-	(
-		(this->getClientWindowRect().right - this->getClientWindowRect().left)/300.0f,
-		(this->getClientWindowRect().bottom - this->getClientWindowRect().top)/300.0f,
-		-4.0f,
-		4.0f
-	);
-	*/
 
 	float height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
 	float width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
@@ -171,7 +127,6 @@ void AppWindow::onCreate()
 
 	// init input
 	m_input = GraphicsEngine::get()->createInput();
-	m_input->init();
 
 	// create Texture from file 
 	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\ghosty.jpg");
@@ -183,13 +138,10 @@ void AppWindow::onCreate()
 
 
 
-
-
 	/*
 		next part is an example of a cube where we define vertices(position, Texture coordinates) in drawIndexedTriangleList mode
 	
 	*/
-
 
 
 	// list of vertices (positions)
@@ -340,6 +292,10 @@ void AppWindow::onUpdate()
 	// include timer for transform and animation
 	updateTransform();
 
+	// Input
+	m_input->Update(m_delta_time);
+
+
 	// bind constant buffer to the graphics pipeline for each shader (overloading)
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
@@ -358,11 +314,9 @@ void AppWindow::onUpdate()
 
 
 
-
 	// finally draw triangles
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
 	m_swap_chain->present(true);
-
 
 
 	// for timing. m_new_delta is current process time. 
@@ -374,7 +328,6 @@ void AppWindow::onUpdate()
 }
 
 
-
 void AppWindow::onSize()
 {
 		RECT rc = this->getClientWindowRect();
@@ -384,66 +337,6 @@ void AppWindow::onSize()
 void AppWindow::onKeyDown(unsigned int value)
 {
 	m_input->KeyDown(value);	
-
-	if (value == 'O') 
-	{
-		m_rot_y -= 3.141 * m_delta_time;
-	}
-
-	if (value == 'P') 
-	{
-		m_rot_y += 3.141 * m_delta_time;
-	}
-
-	if (value == 'I') 
-	{
-		m_rot_x -= 3.141 * m_delta_time;
-	}
-
-	if (value == 'K') 
-	{
-		m_rot_x += 3.141 * m_delta_time;
-	}
-
-	if (value == 'W') 
-	{
-		//m_forward += 3.141 * m_delta_time;
-		m_forward += cosf(m_rot_y) *3.141 * m_delta_time;
-		m_horizontal += sinf(m_rot_y) * 3.141 * m_delta_time;
-	}
-
-	if (value == 'S')
-	{
-		//m_forward -= 3.141 * m_delta_time;
-		m_forward -= cosf(m_rot_y) * 3.141 * m_delta_time;
-		m_horizontal -= sinf(m_rot_y) * 3.141 * m_delta_time;
-	}
-
-	if (value == 'A')
-	{
-
-		m_forward += sinf(m_rot_y) * 3.141 * m_delta_time;
-		m_horizontal -= cosf(m_rot_y) * 3.141 * m_delta_time;
-	}
-
-	if (value == 'D')
-	{
-		//m_horizontal += 3.141 * m_delta_time;
-		m_forward -= sinf(m_rot_y) * 3.141 * m_delta_time;
-		m_horizontal += cosf(m_rot_y) * 3.141 * m_delta_time;
-	}
-
-	if (value == 'Q')
-	{
-		m_vertical += 3.141 * m_delta_time;
-	}
-
-	if (value == 'Y')
-	{
-		m_vertical -= 3.141 * m_delta_time;
-	}
-
-
 }
 
 void AppWindow::onKeyUp(unsigned int value)
@@ -468,7 +361,6 @@ void AppWindow::onDestroy()
 	m_swap_chain->release();
 	m_vs->release();
 	m_ps->release();
-	m_input->release();
 	m_ts->release();
 	GraphicsEngine::get()->release();
 }
