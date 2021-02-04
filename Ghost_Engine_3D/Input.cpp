@@ -49,10 +49,80 @@ void Input::KeyUp(unsigned int value)
 }
 
 
-void Input::MouseDown(int posX, int posY)
+void Input::RMouseDown(int posX, int posY)
 {
-	Beep(posX*posY, 3);
+	m_RMouseClicked = true;
+	m_lastMouseX = posX;
+	m_lastMouseY = posY;
 }
+
+void Input::RMouseUp(int posX, int posY)
+{
+	m_RMouseClicked = false;
+
+	m_moveMouseLeft = false;
+	m_moveMouseRight = false;
+	m_moveMouseDown = false;
+	m_moveMouseUp = false;
+
+}
+
+void Input::MouseMove(int posX, int posY)
+{
+	if (m_RMouseClicked)
+	{
+
+		if ((posX - m_lastMouseX) > 0)
+		{
+			m_moveMouseRight = true;
+			m_moveMouseLeft = false;
+
+		}
+
+		else if ((posX - m_lastMouseX) < 0)
+		{
+			m_moveMouseRight = false;
+			m_moveMouseLeft = true;
+		}
+
+		else
+		{
+			m_moveMouseLeft = false;
+			m_moveMouseRight = false;
+		}
+		
+
+
+
+		if ((posY - m_lastMouseY) > 0)
+		{
+			m_moveMouseUp = true;
+			m_moveMouseDown = false;
+
+		}
+
+		else if ((posY - m_lastMouseY) < 0)
+		{
+			m_moveMouseUp = false;
+			m_moveMouseDown = true;
+		}
+
+		else
+		{
+			m_moveMouseDown = false;
+			m_moveMouseUp = false;
+		}
+	}
+	m_lastMouseX = posX;
+	m_lastMouseY = posY;
+}
+
+void Input::MouseLeave()
+{
+
+}
+
+
 
 // check if movement should be done
 void Input::Update(float time)
@@ -126,7 +196,7 @@ void Input::BackwardMove(float time)
 
 void Input::HorizontalLeftMove(float time)
 {
-	if (m_keys['A'] == 1)
+	if (m_keys['A'] == 1 || m_moveMouseLeft == true)
 	{
 
 		m_horizontalLeftSpeed += time * 0.01f;
@@ -153,7 +223,7 @@ void Input::HorizontalLeftMove(float time)
 
 void Input::HorizontalRightMove(float time)
 {
-	if (m_keys['D'] == 1)
+	if (m_keys['D'] == 1 || m_moveMouseRight == true)
 	{
 
 		m_horizontalRightSpeed += time * 0.01f;
@@ -180,7 +250,7 @@ void Input::HorizontalRightMove(float time)
 
 void Input::UpMove(float time)
 {
-	if (m_keys['Q'] == 1)
+	if (m_keys['Q'] == 1 || m_moveMouseDown == 1)
 	{
 
 		m_UpSpeed += time * 0.01f;
@@ -206,7 +276,7 @@ void Input::UpMove(float time)
 
 void Input::DownMove(float time)
 {
-	if (m_keys['Y'] == 1)
+	if (m_keys['Y'] == 1 || m_moveMouseUp == 1)
 	{
 
 		m_DownSpeed += time * 0.01f;

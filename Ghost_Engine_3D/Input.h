@@ -37,7 +37,10 @@ public:
 
 	void KeyDown(unsigned int value);
 	void KeyUp(unsigned int value);
-	void MouseDown(int posX, int posY);
+	void RMouseDown(int posX, int posY);
+	void RMouseUp(int posX, int posY);
+	void MouseMove(int posX, int posY);
+	void MouseLeave();
 
 	void Update(float time);
 
@@ -65,6 +68,17 @@ private:
 	bool m_keys[256];
 
 private:
+
+	// mouse position and status
+	bool m_RMouseClicked = false;
+	int m_lastMouseX = 0;
+	int m_lastMouseY = 0;
+	
+	bool m_moveMouseRight = 0;
+	bool m_moveMouseLeft = 0;
+	bool m_moveMouseUp = 0;
+	bool m_moveMouseDown = 0;
+
 
 	// position of the camera
 	float m_posX = 1.0f;

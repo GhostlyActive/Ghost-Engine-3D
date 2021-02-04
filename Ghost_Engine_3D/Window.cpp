@@ -102,22 +102,53 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 		// minimal resizing of the window 
 		int x = 400;
 		int y = 400;
+
 		((MINMAXINFO*)lparam)->ptMinTrackSize.x = x;
 		((MINMAXINFO*)lparam)->ptMinTrackSize.y = y;
-
 		break;
 	}
 
-	case WM_LBUTTONDOWN:
+	case WM_RBUTTONDOWN:
 	{
 		int xPos = GET_X_LPARAM(lparam);
 		int yPos = GET_Y_LPARAM(lparam);
 
 		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-		if (window) window->onMouseDown(xPos, yPos);
+		if (window) window->onRMouseDown(xPos, yPos);
+		break;
 	}
 
+	case WM_RBUTTONUP:
+	{
+		int xPos = GET_X_LPARAM(lparam);
+		int yPos = GET_Y_LPARAM(lparam);
+
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if (window) window->onRMouseUp(xPos, yPos);
+		break;
+	}
+
+	case WM_MOUSEMOVE:
+	{
+		int xPos = GET_X_LPARAM(lparam);
+		int yPos = GET_Y_LPARAM(lparam);
+
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if (window) window->onMouseMove(xPos, yPos);
+		break;
+	}
+
+	case WM_MOUSELEAVE:
+	{
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+		if (window) window->onMouseLeave();
+		break;
+	}
+	
 	default:
 		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 	}
@@ -263,7 +294,22 @@ void Window::onKeyUp(unsigned int value)
 
 }
 
-void Window::onMouseDown(int posX, int posY)
+void Window::onRMouseDown(int posX, int posY)
+{
+
+}
+
+void Window::onRMouseUp(int posX, int posY)
+{
+
+}
+
+void Window::onMouseMove(int posX, int posY)
+{
+
+}
+
+void Window::onMouseLeave()
 {
 
 }

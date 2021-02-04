@@ -38,10 +38,7 @@
 #include "TextureShader.h"
 
 #include <d3dcompiler.h>
-
-GraphicsEngine::GraphicsEngine()
-{
-}
+#include <exception>
 
 /*
 	- D3D11CreateDevice: Creates a device that represents the display adapter. Get us access to all ressources to draw on screen. Last three parameters are output
@@ -62,12 +59,12 @@ GraphicsEngine::GraphicsEngine()
 	- D3D_DRIVER_TYPE: allow directX to execute drawing functions. Make a Vector with these driver types from best to worst:
 		1) best -> execute mainly in GPU.(best performance)
 		2) average -> warp drivers drawing calls all in high performance CPU.(SSE instructions)
-		3) worst 
+		3) worst
 */
 
-bool GraphicsEngine::init()
+GraphicsEngine::GraphicsEngine()
 {
-	D3D_DRIVER_TYPE driver_types[]=
+	D3D_DRIVER_TYPE driver_types[] =
 	{
 		D3D_DRIVER_TYPE_HARDWARE,
 		D3D_DRIVER_TYPE_WARP,
@@ -75,30 +72,29 @@ bool GraphicsEngine::init()
 	};
 	UINT num_driver_types = ARRAYSIZE(driver_types);
 
-	D3D_FEATURE_LEVEL feature_levels[]=
+	D3D_FEATURE_LEVEL feature_levels[] =
 	{
 		D3D_FEATURE_LEVEL_11_0
 	};
 	UINT num_feature_levels = ARRAYSIZE(feature_levels);
 
 	HRESULT res = 0;
-	
+
 	for (UINT driver_type_index = 0; driver_type_index < num_driver_types;)
 	{
-		res =D3D11CreateDevice(NULL, driver_types[driver_type_index], NULL, NULL, feature_levels,
+		res = D3D11CreateDevice(NULL, driver_types[driver_type_index], NULL, NULL, feature_levels,
 			num_feature_levels, D3D11_SDK_VERSION, &m_d3d_device, &m_feature_level, &m_imm_context);
 		if (SUCCEEDED(res))
 			break;
-			++driver_type_index;
+		++driver_type_index;
 	}
 	if (FAILED(res))
 	{
-		return false;
+		throw std::exception("Create Device was not successful");
 	}
 
 	//instance of DeviceContext where we pass (immediate Context)-> m_imm_context of class ID3D11DeviceContext*
-	m_imm_device_context=new DeviceContext(m_imm_context);
-
+	m_imm_device_context = new DeviceContext(m_imm_context);
 
 
 	/*
@@ -109,16 +105,13 @@ bool GraphicsEngine::init()
 
 			4. make SwapChain a friend class in GraphicsEngine. To have access to private member dxgi_factory in SwapChain
 	*/
-	
-	m_d3d_device->QueryInterface(__uuidof(IDXGIDevice),(void**)&m_dxgi_device);
+
+	m_d3d_device->QueryInterface(__uuidof(IDXGIDevice), (void**)&m_dxgi_device);
 	m_dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)&m_dxgi_adapter);
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
-
-	return true;
 }
 
-
-bool GraphicsEngine::release()
+GraphicsEngine::~GraphicsEngine()
 {
 	m_dxgi_device->Release();
 	m_dxgi_adapter->Release();
@@ -128,11 +121,6 @@ bool GraphicsEngine::release()
 
 
 	m_d3d_device->Release();
-	return true;
-}
-
-GraphicsEngine::~GraphicsEngine()
-{
 }
 
 /*

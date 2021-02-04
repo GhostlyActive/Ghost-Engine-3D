@@ -42,14 +42,12 @@ class TextureShader;
 class GraphicsEngine
 {
 public:
-	GraphicsEngine();
 	// initialize the GraphicsEngine and DirectX 11 Device
-	bool init();
+	GraphicsEngine();
 	// release all the resources loaded
-	bool release();
 	~GraphicsEngine();
 public:
-	SwapChain * createSwapChain();
+	SwapChain* createSwapChain();
 	DeviceContext* getImmediateDeviceContext();
 	VertexBuffer* createVertexBuffer();
 	IndexBuffer* createIndexBuffer();

@@ -52,7 +52,10 @@ public:
 	virtual void onSize();
 	virtual void onKeyDown(unsigned int value);
 	virtual void onKeyUp(unsigned int value);
-	virtual void onMouseDown(int posX, int posY);
+	virtual void onRMouseDown(int posX, int posY);
+	virtual void onRMouseUp(int posX, int posY);
+	virtual void onMouseMove(int posX, int posY);
+	virtual void onMouseLeave();
 
 	~Window();
 protected:

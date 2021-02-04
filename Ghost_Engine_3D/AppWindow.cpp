@@ -123,7 +123,9 @@ void AppWindow::onCreate()
 {
 	// call onCreate in Window
 	Window::onCreate();
-	GraphicsEngine::get()->init();
+
+	// init the singleton GraphicsEngine
+	GraphicsEngine::get();
 
 	// init input
 	m_input = GraphicsEngine::get()->createInput();
@@ -131,7 +133,7 @@ void AppWindow::onCreate()
 	// create Texture from file 
 	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\ghosty.jpg");
 
-
+	// init SwapChain
 	m_swap_chain=GraphicsEngine::get()->createSwapChain();
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
@@ -344,11 +346,27 @@ void AppWindow::onKeyUp(unsigned int value)
 	m_input->KeyUp(value);
 }
 
-void AppWindow::onMouseDown(int posX, int posY)
+void AppWindow::onRMouseDown(int posX, int posY)
 {
-	m_input->MouseDown(posX, posY);
-
+	m_input->RMouseDown(posX, posY);
 }
+
+void AppWindow::onRMouseUp(int posX, int posY)
+{
+	m_input->RMouseUp(posX, posY);
+}
+
+void AppWindow::onMouseMove(int posX, int posY)
+{
+	m_input->MouseMove(posX, posY);
+}
+
+void AppWindow::onMouseLeave()
+{
+	m_input->MouseLeave();
+}
+
+
 
 void AppWindow::onDestroy()
 {
@@ -362,5 +380,4 @@ void AppWindow::onDestroy()
 	m_vs->release();
 	m_ps->release();
 	m_ts->release();
-	GraphicsEngine::get()->release();
 }
