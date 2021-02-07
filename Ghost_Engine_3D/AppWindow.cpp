@@ -62,7 +62,7 @@ void AppWindow::updateTransform()
 {
 	// getTickCount is a Windows function. output the time since the start of the system in milliseconds
 	constant cc;
-	cc.m_time = ::GetTickCount();
+	cc.m_time = ::GetTickCount64();
 
 	m_delta_pos += m_delta_time / 10.0f;	// last value makes the movement slower. Like 1 unit in x seconds
 	if (m_delta_pos > 1.0f)
@@ -134,10 +134,8 @@ void AppWindow::onCreate()
 	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\ghosty.jpg");
 
 	// init SwapChain
-	m_swap_chain=GraphicsEngine::get()->createSwapChain();
 	RECT rc = this->getClientWindowRect();
-	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
-
+	m_swap_chain = GraphicsEngine::get()->createSwapChain(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
 
 	/*
@@ -209,8 +207,6 @@ void AppWindow::onCreate()
 
 	};
 
-
-	m_vb=GraphicsEngine::get()->createVertexBuffer();
 	UINT size_list = ARRAYSIZE(vertex_list);
 
 
@@ -236,24 +232,23 @@ void AppWindow::onCreate()
 		22,23,20
 	};
 
-	m_ib=GraphicsEngine::get()->createIndexBuffer();
+
 	UINT size_index_list = ARRAYSIZE(index_list);
 
-	// pointer to list and the size of the list for loading 
-	m_ib->load(index_list, size_index_list);
-
+	// indexBuffer - pointer to list and the size of the list for loading 
+	m_ib = GraphicsEngine::get()->createIndexBuffer(index_list, size_index_list);
 
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
 
-	// Vertex Shader Compiling with VertexSader.hlsl
+	// vertex Shader Compiling with VertexSader.hlsl
 	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	// create VertexShader
 	m_vs=GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
 
-	// Vertex_Buffer Loading
-	m_vb->load(vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	// vertex_Buffer Loading
+	m_vb = GraphicsEngine::get()->createVertexBuffer(vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
 
 	// when create resources is finished -> release memory Buffer
 	GraphicsEngine::get()->releaseCompiledShader();
@@ -274,8 +269,7 @@ void AppWindow::onCreate()
 	constant cc;
 	cc.m_time = 0;
 
-	m_cb = GraphicsEngine::get()->createConstantBuffer();
-	m_cb->load(&cc, sizeof(constant));
+	m_cb = GraphicsEngine::get()->createConstantBuffer(&cc, sizeof(constant));
 }
 
 void AppWindow::onUpdate()
@@ -323,7 +317,7 @@ void AppWindow::onUpdate()
 
 	// for timing. m_new_delta is current process time. 
 	m_old_delta = m_new_delta;
-	m_new_delta = ::GetTickCount();
+	m_new_delta = ::GetTickCount64();
 
 	// aligned condition. For beginning when all delta would be zero
 	m_delta_time = (m_old_delta)?((m_new_delta - m_old_delta) / 1000.0f):0;
@@ -336,48 +330,54 @@ void AppWindow::onSize()
 		m_swap_chain->Swap_Resize(rc.right - rc.left, rc.bottom - rc.top);
 }
 
+
 void AppWindow::onKeyDown(unsigned int value)
 {
 	m_input->KeyDown(value);	
 }
+
 
 void AppWindow::onKeyUp(unsigned int value)
 {
 	m_input->KeyUp(value);
 }
 
+
 void AppWindow::onRMouseDown(int posX, int posY)
 {
 	m_input->RMouseDown(posX, posY);
 }
+
 
 void AppWindow::onRMouseUp(int posX, int posY)
 {
 	m_input->RMouseUp(posX, posY);
 }
 
+
 void AppWindow::onMouseMove(int posX, int posY)
 {
 	m_input->MouseMove(posX, posY);
 }
+
 
 void AppWindow::onMouseLeave()
 {
 	m_input->MouseLeave();
 }
 
-
-
+// should be solved by smart pointers
 void AppWindow::onDestroy()
 {
 	// call onDestroy in Window
 	Window::onDestroy();
 
-	m_vb->release();
-	m_ib->release();
-	m_cb->release();
-	m_swap_chain->release();
-	m_vs->release();
-	m_ps->release();
-	m_ts->release();
+	delete m_vb;
+	delete m_ib;
+	delete m_cb;
+	delete m_swap_chain;
+	delete m_input;
+	delete m_vs;
+	delete m_ps;
+	delete m_ts;
 }

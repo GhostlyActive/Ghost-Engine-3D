@@ -29,22 +29,24 @@
 #pragma once
 #include <d3d11.h>
 
-
 class GraphicsEngine;
 class DeviceContext;
 
 class VertexShader
 {
 public:
-	VertexShader();
-	void release();
+
+	VertexShader(const void* shader_byte_code, size_t byte_code_size);
 	~VertexShader();
+
 private:
-	bool init(const void* shader_byte_code, size_t byte_code_size);
+
+	// output variable
+	ID3D11VertexShader* m_vs = nullptr;			
+
 private:
-	ID3D11VertexShader* m_vs;			//output variable
-private:
-	friend class GraphicsEngine;		// want to use vertexShader::init function
+
+	friend class GraphicsEngine;		
 	friend class DeviceContext;
 };
 

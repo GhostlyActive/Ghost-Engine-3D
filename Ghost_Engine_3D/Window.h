@@ -33,6 +33,7 @@
 class Window
 {
 public:
+
 	Window();
 	// initialize the window
 	bool init();
@@ -58,10 +59,11 @@ public:
 	virtual void onMouseLeave();
 
 	~Window();
+
 protected:
+
 	// output
 	HWND m_hwnd;
-
 	bool m_is_run;
 };
 

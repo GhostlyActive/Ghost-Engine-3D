@@ -29,9 +29,7 @@
 #include "VertexBuffer.h"
 #include "GraphicsEngine.h"
 
-VertexBuffer::VertexBuffer():m_layout(0),m_buffer(0)
-{
-}
+#include <exception>
 
 /*
 	- CreateBuffer: Creates a buffer (vertex buffer, index buffer, or shader-constant buffer).
@@ -52,7 +50,7 @@ VertexBuffer::VertexBuffer():m_layout(0),m_buffer(0)
 		Describe and define attributes of vertex type. Information about the attributes that we compose our vertex type
 */
 
-bool VertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, size_t size_byte_shader)
+VertexBuffer::VertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, size_t size_byte_shader) : m_layout(0), m_buffer(0)
 {
 	// release these to create new ones
 	if (m_buffer)m_buffer->Release();
@@ -67,7 +65,7 @@ bool VertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size_list, v
 
 	D3D11_SUBRESOURCE_DATA init_data = {};
 
-	//pointer to the memory of the vertices location 
+	// pointer to the memory of the vertices location 
 	init_data.pSysMem = list_vertices;
 
 	m_size_vertex = size_vertex;
@@ -75,7 +73,7 @@ bool VertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size_list, v
 
 	if (FAILED(GraphicsEngine::get()->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer)))
 	{
-		return false;
+		throw std::exception("Create Vertex Buffer was not successful");
 	}
 
 	/*
@@ -83,37 +81,30 @@ bool VertexBuffer::load(void* list_vertices, UINT size_vertex, UINT size_list, v
 		AlignedByteOffset indicates how the data is spaced in the buffer. First position needs 12 Bytes of space. Next one added 12 or 16 Bytes. D3D11_APPEND_ALIGNED_ELEMENT makes it automatically
 	*/
 
-	D3D11_INPUT_ELEMENT_DESC layout[]=
+	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		//SEMANTIC NAME - SEMANTIC INDEX - FORMAT - INPUT SLOT - ALIGNED BYTE OFFSET - INPUT SLOT CLASS - INSTANCE DATA STEP RATE
 		{"POSITION", 0,  DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{ "TEXCOORD", 0,  DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA , 0}
 	};
-	
+
 	UINT size_layout = ARRAYSIZE(layout);
 
 	if (FAILED(GraphicsEngine::get()->m_d3d_device->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_layout)))
 	{
-		return false;
+		throw std::exception("Create Input Layout was not successful");
 	}
-
-	return true;
 }
+
 
 UINT VertexBuffer::getSizeVertexList()
 {
 	return this->m_size_list;
 }
 
-bool VertexBuffer::release()
-{
-	m_layout->Release();
-	m_buffer->Release();
-	delete this;			// because "return new VertexBuffer();"
-	return true;
-}
-
 
 VertexBuffer::~VertexBuffer()
 {
+	m_layout->Release();
+	m_buffer->Release();
 }

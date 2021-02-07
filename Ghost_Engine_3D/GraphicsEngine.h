@@ -42,51 +42,57 @@ class TextureShader;
 class GraphicsEngine
 {
 public:
+
 	// initialize the GraphicsEngine and DirectX 11 Device
 	GraphicsEngine();
 	// release all the resources loaded
 	~GraphicsEngine();
+
 public:
-	SwapChain* createSwapChain();
+
+	SwapChain* createSwapChain(HWND hwnd, UINT width, UINT height);
 	DeviceContext* getImmediateDeviceContext();
-	VertexBuffer* createVertexBuffer();
-	IndexBuffer* createIndexBuffer();
-	ConstantBuffer* createConstantBuffer();
+	VertexBuffer* createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, size_t size_byte_shader);
+	IndexBuffer* createIndexBuffer(void* list_indices, UINT size_list);
+	ConstantBuffer* createConstantBuffer(void* buffer, UINT size_buffer);
 	VertexShader* createVertexShader(const void* shader_byte_code, size_t byte_code_size);
 	PixelShader* createPixelShader(const void* shader_byte_code, size_t byte_code_size);
 	Input* createInput();
 	TextureShader* createTextureShader(const wchar_t* file);
 
 public:
+
 	bool compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 	bool compilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 
 	void releaseCompiledShader();
 
 public:
+
 	//GraphicsEngine class should be a Singleton class. Static method that return a pointer to GraphicsEngine instance
 	static GraphicsEngine* get();
 
 private:
-	DeviceContext * m_imm_device_context;
+	DeviceContext* m_imm_device_context = nullptr;
 private:
-	ID3D11Device * m_d3d_device;
+	ID3D11Device* m_d3d_device = nullptr;
 	D3D_FEATURE_LEVEL m_feature_level;
 private:
-	IDXGIDevice * m_dxgi_device;
-	IDXGIAdapter* m_dxgi_adapter;
-	IDXGIFactory* m_dxgi_factory;
-	ID3D11DeviceContext* m_imm_context;
+	IDXGIDevice* m_dxgi_device = nullptr;
+	IDXGIAdapter* m_dxgi_adapter = nullptr;
+	IDXGIFactory* m_dxgi_factory = nullptr;
+	ID3D11DeviceContext* m_imm_context = nullptr;
 
 private:
 	ID3DBlob * m_blob = nullptr;		// ouput of compiler:  data structure in which we replaced the buffer with the compiled shader and its size in mememory
 
 private:
+
 	friend class SwapChain;
 	friend class VertexBuffer;
 	friend class IndexBuffer;
 	friend class ConstantBuffer;
-	friend class VertexShader;			// to use in init function - GraphicsEngine::get()->m_d3d_device->CreateVertexShader
+	friend class VertexShader;			
 	friend class PixelShader;
 	friend class Input;
 	friend class TextureShader;

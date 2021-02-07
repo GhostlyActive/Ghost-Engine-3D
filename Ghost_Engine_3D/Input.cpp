@@ -26,7 +26,6 @@
 
 #include "Input.h"
 
-
 Input::Input()
 {
 	// init all keys as being released
@@ -405,7 +404,6 @@ void Input::DownRotateMove(float time)
 }
 
 
-
 float Input::getRotX() { return m_rotX; }
 float Input::getRotY() { return m_rotY; }
 
@@ -416,5 +414,5 @@ float Input::getPosZ() { return m_posZ; }
 
 Input::~Input()
 {
-	delete this;
+
 }

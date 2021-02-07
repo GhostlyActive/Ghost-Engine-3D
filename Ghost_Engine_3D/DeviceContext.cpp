@@ -161,13 +161,8 @@ void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer*
 	m_device_context->PSSetConstantBuffers(0, 1, &buffer->m_buffer);
 }
 
-bool DeviceContext::release()
-{
-	m_device_context->Release();
-	delete this;					// made instance with new in GraphicsEngine.cpp
-	return true;
-}
 
 DeviceContext::~DeviceContext()
 {
+	m_device_context->Release();
 }

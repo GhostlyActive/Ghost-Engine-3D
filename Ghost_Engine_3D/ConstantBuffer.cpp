@@ -30,13 +30,10 @@
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 
-ConstantBuffer::ConstantBuffer()
-{
-}
-
+#include <exception>
 
 /*
-	- load -> two parameter which one is pointer to a buffer and its size in memory
+	- ConstantBuffer() -> two parameter which one is pointer to a buffer and its size in memory
 	- almost the same in VertexBuffer (delete Input Layout Object, size = size_buffer, change BindFlags)
 	- make ConstantBuffer a friend class of GraphicsEngine to use private member m_d3d_device for creating a Buffer
 
@@ -49,7 +46,7 @@ ConstantBuffer::ConstantBuffer()
 	);
 */
 
-bool ConstantBuffer::load(void * buffer, UINT size_buffer)
+ConstantBuffer::ConstantBuffer(void* buffer, UINT size_buffer)
 {
 	if (m_buffer)m_buffer->Release();
 
@@ -65,10 +62,8 @@ bool ConstantBuffer::load(void * buffer, UINT size_buffer)
 
 	if (FAILED(GraphicsEngine::get()->m_d3d_device->CreateBuffer(&buff_desc, &init_data, &m_buffer)))
 	{
-		return false;
+		throw std::exception("Create Constant Buffer was not successful");
 	}
-
-	return true;
 }
 
 
@@ -89,21 +84,14 @@ bool ConstantBuffer::load(void * buffer, UINT size_buffer)
 	);
 */
 
-void ConstantBuffer::update(DeviceContext * context, void * buffer)
+void ConstantBuffer::update(DeviceContext* context, void* buffer)
 {
 	context->m_device_context->UpdateSubresource(this->m_buffer, NULL, NULL, buffer, NULL, NULL);
-}
-
-bool ConstantBuffer::release()
-{
-	// release buffer
-	if (m_buffer)m_buffer->Release();
-	// delete object
-	delete this;
-	return true;
 }
 
 
 ConstantBuffer::~ConstantBuffer()
 {
+	// release buffer
+	if (m_buffer)m_buffer->Release();
 }

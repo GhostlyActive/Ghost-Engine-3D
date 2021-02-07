@@ -111,46 +111,68 @@ GraphicsEngine::GraphicsEngine()
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 }
 
-GraphicsEngine::~GraphicsEngine()
-{
-	m_dxgi_device->Release();
-	m_dxgi_adapter->Release();
-	m_dxgi_factory->Release();
-
-	m_imm_device_context->release();
-
-
-	m_d3d_device->Release();
-}
 
 /*
 	allocate new instance
 */
 
-SwapChain * GraphicsEngine::createSwapChain()
+SwapChain* GraphicsEngine::createSwapChain(HWND hwnd, UINT width, UINT height)
 {
-	return new SwapChain();
+	SwapChain* swap = nullptr;
+	try
+	{
+		swap = new SwapChain(hwnd, width, height);
+	}
+	catch (...) {}
+
+	return swap;
 }
 
-DeviceContext * GraphicsEngine::getImmediateDeviceContext()
+
+DeviceContext* GraphicsEngine::getImmediateDeviceContext()
 {
 	return this->m_imm_device_context;
 }
 
-VertexBuffer * GraphicsEngine::createVertexBuffer()
+
+VertexBuffer* GraphicsEngine::createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, size_t size_byte_shader)
 {
-	return new VertexBuffer();
+	VertexBuffer* vertex = nullptr;
+	try
+	{
+		vertex = new VertexBuffer(list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	}
+	catch (...) {}
+
+	return vertex;
 }
 
-IndexBuffer * GraphicsEngine::createIndexBuffer()
+
+IndexBuffer * GraphicsEngine::createIndexBuffer(void* list_indices, UINT size_list)
 {
-	return new IndexBuffer();
+	IndexBuffer* index = nullptr;
+	try
+	{
+		index = new IndexBuffer(list_indices, size_list);
+	}
+	catch (...) {}
+
+	return index;
 }
 
-ConstantBuffer * GraphicsEngine::createConstantBuffer()
+
+ConstantBuffer* GraphicsEngine::createConstantBuffer(void* buffer, UINT size_buffer)
 {
-	return new ConstantBuffer();
+	ConstantBuffer* constant = nullptr;
+	try
+	{
+		constant = new ConstantBuffer(buffer, size_buffer);
+	}
+	catch (...) {}
+
+	return constant;
 }
+
 
 Input* GraphicsEngine::createInput()
 {
@@ -159,47 +181,46 @@ Input* GraphicsEngine::createInput()
 
 
 /*
-	- Create new instance of VertexShader class -> vs
+	- Create new instance of VertexShader class -> vertex
 	- make Graphicsengine friend class in Vertex shader to call private method init
 */
 
-VertexShader * GraphicsEngine::createVertexShader(const void * shader_byte_code, size_t byte_code_size)
+VertexShader* GraphicsEngine::createVertexShader(const void* shader_byte_code, size_t byte_code_size)
 {
-	VertexShader* vs = new VertexShader();
-
-	if (!vs->init(shader_byte_code, byte_code_size))
+	VertexShader* vertex = nullptr;
+	try
 	{
-		vs->release();
-		return nullptr;
+		vertex = new VertexShader(shader_byte_code, byte_code_size);
 	}
+	catch (...) {}
 
-	return vs;
+	return vertex;
 }
 
-PixelShader * GraphicsEngine::createPixelShader(const void * shader_byte_code, size_t byte_code_size)
+
+PixelShader* GraphicsEngine::createPixelShader(const void * shader_byte_code, size_t byte_code_size)
 {
-	PixelShader* ps = new PixelShader();
-
-	if (!ps->init(shader_byte_code, byte_code_size))
+	PixelShader* pixel = nullptr;
+	try
 	{
-		ps->release();
-		return nullptr;
+		pixel = new PixelShader(shader_byte_code, byte_code_size);
 	}
+	catch (...) {}
 
-	return ps;
+	return pixel;
 }
+
 
 TextureShader* GraphicsEngine::createTextureShader(const wchar_t* file)
 {
-	TextureShader* ts = new TextureShader();
-
-	if (!ts->init(file))
+	TextureShader* texture = nullptr;
+	try
 	{
-		ts->release();
-		return nullptr;
+		texture = new TextureShader(file);
 	}
+	catch (...) {}
 
-	return ts;
+	return texture;
 }
 
 
@@ -231,7 +252,8 @@ bool GraphicsEngine::compileVertexShader(const wchar_t* file_name,const char* en
 	return true;
 }
 
-bool GraphicsEngine::compilePixelShader(const wchar_t * file_name, const char * entry_point_name, void ** shader_byte_code, size_t * byte_code_size)
+
+bool GraphicsEngine::compilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size)
 {
 	ID3DBlob* error_blob = nullptr;
 	if (!SUCCEEDED(D3DCompileFromFile(file_name, nullptr, nullptr, entry_point_name, "ps_5_0", 0, 0, &m_blob, &error_blob)))
@@ -246,9 +268,22 @@ bool GraphicsEngine::compilePixelShader(const wchar_t * file_name, const char * 
 	return true;
 }
 
+
 void GraphicsEngine::releaseCompiledShader()
 {
 	if (m_blob)m_blob->Release();
+}
+
+
+GraphicsEngine::~GraphicsEngine()
+{
+	m_dxgi_device->Release();
+	m_dxgi_adapter->Release();
+	m_dxgi_factory->Release();
+
+	delete m_imm_device_context;
+
+	m_d3d_device->Release();
 }
 
 
@@ -257,7 +292,7 @@ void GraphicsEngine::releaseCompiledShader()
 	 each time this get function will always get the same instance -> no more instances of this class will be created at runtime
 */
 
-GraphicsEngine * GraphicsEngine::get()
+GraphicsEngine* GraphicsEngine::get()
 {
 	static GraphicsEngine engine;
 	return &engine;

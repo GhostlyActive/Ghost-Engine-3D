@@ -34,20 +34,20 @@ class DeviceContext;
 class TextureShader
 {
 public:
-	TextureShader();
-	void release();
-	~TextureShader();
 
+	// this will load a texutre from a file
+	TextureShader(const wchar_t* file);
+	~TextureShader();
 	// return a pointer to the texture resource
 	ID3D11ShaderResourceView* GetTexture();
 
 private:
-	// this will load a texutre from a file
-	bool init(const wchar_t* file);
-private:
+
 	ID3D11Resource* m_picture = nullptr;
 	ID3D11ShaderResourceView* m_ts = nullptr;
+
 private:
+
 	friend class GraphicsEngine;
 	friend class DeviceContext;
 };
