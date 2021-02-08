@@ -40,6 +40,10 @@
 #include <d3dcompiler.h>
 #include <exception>
 
+#include "Libs/ImGui/imgui.h"
+#include "Libs/ImGui/imgui_impl_win32.h"
+#include "Libs/ImGui/imgui_impl_dx11.h"
+
 /*
 	- D3D11CreateDevice: Creates a device that represents the display adapter. Get us access to all ressources to draw on screen. Last three parameters are output
 
@@ -111,6 +115,42 @@ GraphicsEngine::GraphicsEngine()
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 }
 
+void GraphicsEngine::InitGui(HWND hwnd)
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init(hwnd);
+	ImGui_ImplDX11_Init(m_d3d_device, m_imm_context);
+	ImGui::StyleColorsClassic();
+}
+
+void GraphicsEngine::RenderGui()
+{
+	// start ImGui frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::ShowDemoWindow();
+	static float f = 0.0f;
+	static int counter = 0;
+
+	ImGui::Begin("fps");                          
+
+	ImGui::Text(" (%.1f FPS)",ImGui::GetIO().Framerate);
+	ImGui::End();
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+	/*
+	ImGui::Begin("heyy");
+	ImGui::End();
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	*/
+}
 
 /*
 	allocate new instance

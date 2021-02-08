@@ -41,8 +41,18 @@ Window::Window()
 	- msg -> message paramter-> what event has been called ike WM_CREATE or WM_DESTROY or Default which pass all paramters available
 */
 
+
+// declare message handler from imgui_impl_win32.cpp
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+// win32 message handler
 LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
+	{
+		return true;
+	}
+
 	switch (msg)
 	{
 

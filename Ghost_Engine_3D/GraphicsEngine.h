@@ -60,6 +60,11 @@ public:
 	Input* createInput();
 	TextureShader* createTextureShader(const wchar_t* file);
 
+	// ImGui
+	void InitGui(HWND hwnd);
+	void RenderGui();
+
+
 public:
 
 	bool compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);

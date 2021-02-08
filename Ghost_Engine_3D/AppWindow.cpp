@@ -127,6 +127,9 @@ void AppWindow::onCreate()
 	// init the singleton GraphicsEngine
 	GraphicsEngine::get();
 
+	// init ImGui
+	GraphicsEngine::get()->InitGui(this->m_hwnd);
+
 	// init input
 	m_input = GraphicsEngine::get()->createInput();
 
@@ -312,6 +315,9 @@ void AppWindow::onUpdate()
 
 	// finally draw triangles
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
+
+	GraphicsEngine::get()->RenderGui();
+
 	m_swap_chain->present(true);
 
 
