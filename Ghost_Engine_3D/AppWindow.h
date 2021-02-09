@@ -47,6 +47,8 @@ public:
 
 	void updateTransform();
 
+	void UpdateGui();
+
 	~AppWindow();
 
 	// Inherited via Window

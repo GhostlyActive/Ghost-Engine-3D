@@ -62,8 +62,6 @@ public:
 
 	// ImGui
 	void InitGui(HWND hwnd);
-	void RenderGui();
-
 
 public:
 

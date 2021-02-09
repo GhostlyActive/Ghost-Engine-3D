@@ -138,6 +138,15 @@ void Input::Update(float time)
 	DownRotateMove(time);
 }
 
+
+void Input::setTransform(float Transform[3])
+{
+	m_posX = Transform[0];
+	m_posY = Transform[1];
+	m_posZ = Transform[2];
+}
+
+
 void Input::ForwardMove(float time) 
 {
 	if (m_keys['W'] == 1)

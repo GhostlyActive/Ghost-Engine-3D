@@ -15,8 +15,8 @@ Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Wi
 
 <p align="center">
   <img src="/Media/Ghost Engine 3D_Video_GUI.gif" width="801" alt="Showcase">
-  <img src="/Media/Cube_Texture.PNG" width="400" alt="Cube_Texture">
-  <img src="/Media/Cube_1.PNG" width="400" alt="Cube_1">
+  <img src="/Media/Cube_GUI.PNG" width="400" alt="Cube_Texture">
+  <img src="/Media/Pyramid_1.PNG" width="400" alt="Pyramid_1">
   <img src="/Media/Cube_4.PNG" width="400" alt="Cube_4">
   <img src="/Media/Pyramid_2.PNG" width="400" alt="Pyramid2">
 </p>

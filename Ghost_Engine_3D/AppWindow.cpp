@@ -32,6 +32,10 @@
 #include "Vector2D.h"
 #include "Matrix4x4.h"
 
+#include "Libs/ImGui/imgui.h"
+#include "Libs/ImGui/imgui_impl_win32.h"
+#include "Libs/ImGui/imgui_impl_dx11.h"
+
 struct vertex
 {
 	Vector3D position;
@@ -112,6 +116,34 @@ void AppWindow::updateTransform()
 
 	// pass it to the Constant buffer update function
 	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+}
+
+
+void AppWindow::UpdateGui()
+{
+	float CameraTranslation[3] = { m_input->getPosX(), m_input->getPosY(), m_input->getPosZ() };
+	static int counter = 0;
+
+	// start ImGui frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	//ImGui::ShowDemoWindow();
+
+	ImGui::Begin("fps");
+	ImGui::Text(" (%.1f FPS)", ImGui::GetIO().Framerate);
+	ImGui::End();
+
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("Translation", CameraTranslation, 0.1f, -10.0f, 10.0f);
+	m_input->setTransform(CameraTranslation);
+
+
+	ImGui::End();
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 
@@ -316,7 +348,7 @@ void AppWindow::onUpdate()
 	// finally draw triangles
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
 
-	GraphicsEngine::get()->RenderGui();
+	UpdateGui();
 
 	m_swap_chain->present(true);
 

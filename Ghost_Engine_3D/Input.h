@@ -43,6 +43,7 @@ public:
 	void MouseLeave();
 
 	void Update(float time);
+	void setTransform(float Transform[3]);
 
 	// transform and rotation movement
 	void ForwardMove(float time);

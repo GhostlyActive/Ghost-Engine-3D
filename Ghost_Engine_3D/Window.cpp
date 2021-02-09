@@ -88,6 +88,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,UINT msg, WPARAM wparam, LPARAM lparam)
 		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 		if(window) window->onSize();
+		window->onUpdate();
 		break;
 	}
 

@@ -125,32 +125,6 @@ void GraphicsEngine::InitGui(HWND hwnd)
 	ImGui::StyleColorsClassic();
 }
 
-void GraphicsEngine::RenderGui()
-{
-	// start ImGui frame
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-	ImGui::ShowDemoWindow();
-	static float f = 0.0f;
-	static int counter = 0;
-
-	ImGui::Begin("fps");                          
-
-	ImGui::Text(" (%.1f FPS)",ImGui::GetIO().Framerate);
-	ImGui::End();
-
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-	/*
-	ImGui::Begin("heyy");
-	ImGui::End();
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	*/
-}
 
 /*
 	allocate new instance
@@ -321,9 +295,16 @@ GraphicsEngine::~GraphicsEngine()
 	m_dxgi_adapter->Release();
 	m_dxgi_factory->Release();
 
+	// destroy device context
 	delete m_imm_device_context;
 
+	// destroy DirectX device
 	m_d3d_device->Release();
+
+	// destroy ImGui
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 }
 
 
