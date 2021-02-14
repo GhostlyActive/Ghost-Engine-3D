@@ -152,17 +152,17 @@ void Input::ForwardMove(float time)
 	if (m_keys['W'] == 1)
 	{
 
-		m_forwardSpeed += time * 0.01f;
+		m_forwardSpeed += time * acc;
 
-		if (m_forwardSpeed > (time * 0.3f))
+		if (m_forwardSpeed > (time * max_speed))
 		{
-			m_forwardSpeed = time * 0.3f;
+			m_forwardSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_forwardSpeed -= time * 0.006f;
+		m_forwardSpeed -= time * dec;
 
 		if (m_forwardSpeed < 0.0f)
 		{
@@ -179,17 +179,17 @@ void Input::BackwardMove(float time)
 	if (m_keys['S'] == 1)
 	{
 
-		m_backwardSpeed += time * 0.01f;
+		m_backwardSpeed += time * acc;
 
-		if (m_backwardSpeed > (time * 0.3f))
+		if (m_backwardSpeed > (time * max_speed))
 		{
-			m_backwardSpeed = time * 0.3f;
+			m_backwardSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_backwardSpeed -= time * 0.006f;
+		m_backwardSpeed -= time * dec;
 
 		if (m_backwardSpeed < 0.0f)
 		{
@@ -207,17 +207,17 @@ void Input::HorizontalLeftMove(float time)
 	if (m_keys['A'] == 1 || m_moveMouseLeft == true)
 	{
 
-		m_horizontalLeftSpeed += time * 0.01f;
+		m_horizontalLeftSpeed += time * acc;
 
-		if (m_horizontalLeftSpeed > (time * 0.3f))
+		if (m_horizontalLeftSpeed > (time * max_speed))
 		{
-			m_horizontalLeftSpeed = time * 0.3f;
+			m_horizontalLeftSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_horizontalLeftSpeed -= time * 0.006f;
+		m_horizontalLeftSpeed -= time * dec;
 
 		if (m_horizontalLeftSpeed < 0.0f)
 		{
@@ -234,17 +234,17 @@ void Input::HorizontalRightMove(float time)
 	if (m_keys['D'] == 1 || m_moveMouseRight == true)
 	{
 
-		m_horizontalRightSpeed += time * 0.01f;
+		m_horizontalRightSpeed += time * acc;
 
-		if (m_horizontalRightSpeed > (time * 0.3f))
+		if (m_horizontalRightSpeed > (time * max_speed))
 		{
-			m_horizontalRightSpeed = time * 0.3f;
+			m_horizontalRightSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_horizontalRightSpeed -= time * 0.006f;
+		m_horizontalRightSpeed -= time * dec;
 
 		if (m_horizontalRightSpeed < 0.0f)
 		{
@@ -261,17 +261,17 @@ void Input::UpMove(float time)
 	if (m_keys['Q'] == 1 || m_moveMouseDown == 1)
 	{
 
-		m_UpSpeed += time * 0.01f;
+		m_UpSpeed += time * acc;
 
-		if (m_UpSpeed > (time * 0.3f))
+		if (m_UpSpeed > (time * max_speed))
 		{
-			m_UpSpeed = time * 0.3f;
+			m_UpSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_UpSpeed -= time * 0.006f;
+		m_UpSpeed -= time * dec;
 
 		if (m_UpSpeed < 0.0f)
 		{
@@ -287,17 +287,17 @@ void Input::DownMove(float time)
 	if (m_keys['Y'] == 1 || m_moveMouseUp == 1)
 	{
 
-		m_DownSpeed += time * 0.01f;
+		m_DownSpeed += time * acc;
 
-		if (m_DownSpeed > (time * 0.3f))
+		if (m_DownSpeed > (time * max_speed))
 		{
-			m_DownSpeed = time * 0.3f;
+			m_DownSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_DownSpeed -= time * 0.006f;
+		m_DownSpeed -= time * dec;
 
 		if (m_DownSpeed < 0.0f)
 		{
@@ -313,17 +313,17 @@ void Input::LeftRotateMove(float time)
 	if (m_keys['O'] == 1)
 	{
 
-		m_rotLeftSpeed += time * 0.01f;
+		m_rotLeftSpeed += time * acc;
 
-		if (m_rotLeftSpeed > (time * 0.3f))
+		if (m_rotLeftSpeed > (time * max_speed))
 		{
-			m_rotLeftSpeed = time * 0.3f;
+			m_rotLeftSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_rotLeftSpeed -= time * 0.006f;
+		m_rotLeftSpeed -= time * dec;
 
 		if (m_rotLeftSpeed < 0.0f)
 		{
@@ -339,17 +339,17 @@ void Input::RightRotateMove(float time)
 	if (m_keys['P'] == 1)
 	{
 
-		m_rotRightSpeed += time * 0.01f;
+		m_rotRightSpeed += time * acc;
 
-		if (m_rotRightSpeed > (time * 0.3f))
+		if (m_rotRightSpeed > (time * max_speed))
 		{
-			m_rotRightSpeed = time * 0.3f;
+			m_rotRightSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_rotRightSpeed -= time * 0.006f;
+		m_rotRightSpeed -= time * dec;
 
 		if (m_rotRightSpeed < 0.0f)
 		{
@@ -365,17 +365,17 @@ void Input::UpRotateMove(float time)
 	if (m_keys['I'] == 1)
 	{
 
-		m_rotUpSpeed += time * 0.01f;
+		m_rotUpSpeed += time * acc;
 
-		if (m_rotUpSpeed > (time * 0.3f))
+		if (m_rotUpSpeed > (time * max_speed))
 		{
-			m_rotUpSpeed = time * 0.3f;
+			m_rotUpSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_rotUpSpeed -= time * 0.006f;
+		m_rotUpSpeed -= time * dec;
 
 		if (m_rotUpSpeed < 0.0f)
 		{
@@ -391,17 +391,17 @@ void Input::DownRotateMove(float time)
 	if (m_keys['K'] == 1)
 	{
 
-		m_rotDownSpeed += time * 0.01f;
+		m_rotDownSpeed += time * acc;
 
-		if (m_rotDownSpeed > (time * 0.3f))
+		if (m_rotDownSpeed > (time * max_speed))
 		{
-			m_rotDownSpeed = time * 0.3f;
+			m_rotDownSpeed = time * max_speed;
 		}
 	}
 
 	else
 	{
-		m_rotDownSpeed -= time * 0.006f;
+		m_rotDownSpeed -= time * dec;
 
 		if (m_rotDownSpeed < 0.0f)
 		{

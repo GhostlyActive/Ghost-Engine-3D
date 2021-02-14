@@ -36,6 +36,7 @@
 #include "PixelShader.h"
 #include "Input.h"
 #include "TextureShader.h"
+#include "MeshModel.h"
 
 #include <d3dcompiler.h>
 #include <exception>
@@ -123,6 +124,18 @@ void GraphicsEngine::InitGui(HWND hwnd)
 	ImGui_ImplWin32_Init(hwnd);
 	ImGui_ImplDX11_Init(m_d3d_device, m_imm_context);
 	ImGui::StyleColorsClassic();
+
+	/*
+	void* shader_byte_code = nullptr;
+	size_t size_shader = 0;
+
+
+	GraphicsEngine::get()->compileVertexShader(L"MeshModelShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
+	::memcpy(m_mesh_byte, shader_byte_code, size_shader);
+	m_mesh_size = size_shader;
+	GraphicsEngine::get()->releaseCompiledShader();
+
+	*/
 }
 
 
@@ -235,6 +248,39 @@ TextureShader* GraphicsEngine::createTextureShader(const wchar_t* file)
 	catch (...) {}
 
 	return texture;
+}
+
+
+MeshModel* GraphicsEngine::createMeshModel(const wchar_t* file)
+{
+	MeshModel* mesh = nullptr;
+	try
+	{
+		mesh = new MeshModel(file);
+
+	}
+	catch (...) {}
+
+
+	return mesh;
+}
+
+void GraphicsEngine::setMeshModel()
+{
+	void* shader_byte_code = nullptr;
+	size_t size_shader = 0;
+
+
+	GraphicsEngine::get()->compileVertexShader(L"MeshModelShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
+	::memcpy(m_mesh_byte, shader_byte_code, size_shader);
+	m_mesh_size = size_shader;
+	GraphicsEngine::get()->releaseCompiledShader();
+}
+
+void GraphicsEngine::getMeshModelShader(void** byte_code, size_t* size)
+{
+	*byte_code = m_mesh_byte;
+	*size = m_mesh_size;
 }
 
 

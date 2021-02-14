@@ -46,6 +46,9 @@
     <Filter Include="GameEngine\InputSystem\ImGui">
       <UniqueIdentifier>{94da718b-4b86-4e3a-b495-4fbdf13cb547}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\MeshModel">
+      <UniqueIdentifier>{009e5dda-02aa-48ca-a4d4-879e4b47c53c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="Libs\ImGui\imgui_demo.cpp">
       <Filter>GameEngine\InputSystem\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshModel.cpp">
+      <Filter>GameEngine\GraphicsEngine\MeshModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,12 +188,21 @@
     <ClInclude Include="Libs\ImGui\imstb_truetype.h">
       <Filter>GameEngine\InputSystem\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="MeshModel.h">
+      <Filter>GameEngine\GraphicsEngine\MeshModel</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexMesh.h">
+      <Filter>GameEngine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
       <Filter>App</Filter>
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
+      <Filter>App</Filter>
+    </FxCompile>
+    <FxCompile Include="MeshModelShader.hlsl">
       <Filter>App</Filter>
     </FxCompile>
   </ItemGroup>

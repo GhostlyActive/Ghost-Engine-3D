@@ -68,6 +68,10 @@ private:
 
 	bool m_keys[256];
 
+	float acc = 0.03f;
+	float max_speed = 0.6f;
+	float dec = (float)(acc / 2);
+
 private:
 
 	// mouse position and status

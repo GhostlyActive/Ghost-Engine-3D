@@ -31,6 +31,7 @@
 #include "Vector3D.h"
 #include "Vector2D.h"
 #include "Matrix4x4.h"
+#include "MeshModel.h"
 
 #include "Libs/ImGui/imgui.h"
 #include "Libs/ImGui/imgui_impl_win32.h"
@@ -64,7 +65,7 @@ AppWindow::AppWindow()
 
 void AppWindow::updateTransform()
 {
-	// getTickCount is a Windows function. output the time since the start of the system in milliseconds
+	// getTickCount is a Windows function. Output the time since the start of the system in milliseconds
 	constant cc;
 	cc.m_time = ::GetTickCount64();
 
@@ -162,116 +163,24 @@ void AppWindow::onCreate()
 	// init ImGui
 	GraphicsEngine::get()->InitGui(this->m_hwnd);
 
+
 	// init input
 	m_input = GraphicsEngine::get()->createInput();
 
+	// set MeshModel()
+	GraphicsEngine::get()->setMeshModel();
+
 	// create Texture from file 
-	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\ghosty.jpg");
+	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\marmor2.jpg");
+
+	m_mesh = GraphicsEngine::get()->createMeshModel(L"Graphics\\Objects\\temple.obj");
+
+
 
 	// init SwapChain
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain = GraphicsEngine::get()->createSwapChain(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
-
-	/*
-		next part is an example of a cube where we define vertices(position, Texture coordinates) in drawIndexedTriangleList mode
-	
-	*/
-
-
-	// list of vertices (positions)
-	Vector3D position_list[] =
-	{
-		{ Vector3D(-0.5f,-0.5f,-0.5f)},
-		{ Vector3D(-0.5f,0.5f,-0.5f) },
-		{ Vector3D(0.5f,0.5f,-0.5f) },
-		{ Vector3D(0.5f,-0.5f,-0.5f)},
-
-		//BACK FACE
-		{ Vector3D(0.5f,-0.5f,0.5f) },
-		{ Vector3D(0.5f,0.5f,0.5f) },
-		{ Vector3D(-0.5f,0.5f,0.5f)},
-		{ Vector3D(-0.5f,-0.5f,0.5f) }
-	};
-
-	// texture coordinates (u,v) (0,0) -> top left corner and (1,1) -> down right corner
-	Vector2D texcoord_list[] =
-	{
-		{ Vector2D(0.0f,0.0f) },
-		{ Vector2D(0.0f,1.0f) },
-		{ Vector2D(1.0f,0.0f) },
-		{ Vector2D(1.0f,1.0f) }
-	};
-
-	// thats the final list
-	vertex vertex_list[] =
-	{
-		//X - Y - Z
-		//FRONT FACE
-		{ position_list[0],texcoord_list[1] },
-		{ position_list[1],texcoord_list[0] },
-		{ position_list[2],texcoord_list[2] },
-		{ position_list[3],texcoord_list[3] },
-
-
-		{ position_list[4],texcoord_list[1] },
-		{ position_list[5],texcoord_list[0] },
-		{ position_list[6],texcoord_list[2] },
-		{ position_list[7],texcoord_list[3] },
-
-
-		{ position_list[1],texcoord_list[1] },
-		{ position_list[6],texcoord_list[0] },
-		{ position_list[5],texcoord_list[2] },
-		{ position_list[2],texcoord_list[3] },
-
-		{ position_list[7],texcoord_list[1] },
-		{ position_list[0],texcoord_list[0] },
-		{ position_list[3],texcoord_list[2] },
-		{ position_list[4],texcoord_list[3] },
-
-		{ position_list[3],texcoord_list[1] },
-		{ position_list[2],texcoord_list[0] },
-		{ position_list[5],texcoord_list[2] },
-		{ position_list[4],texcoord_list[3] },
-
-		{ position_list[7],texcoord_list[1] },
-		{ position_list[6],texcoord_list[0] },
-		{ position_list[1],texcoord_list[2] },
-		{ position_list[0],texcoord_list[3] }
-
-	};
-
-	UINT size_list = ARRAYSIZE(vertex_list);
-
-
-	unsigned int index_list[] =
-	{
-		//FRONT SIDE
-		0,1,2,  //FIRST TRIANGLE
-		2,3,0,  //SECOND TRIANGLE
-		//BACK SIDE
-		4,5,6,
-		6,7,4,
-		//TOP SIDE
-		8,9,10,
-		10,11,8,
-		//BOTTOM SIDE
-		12,13,14,
-		14,15,12,
-		//RIGHT SIDE
-		16,17,18,
-		18,19,16,
-		//LEFT SIDE
-		20,21,22,
-		22,23,20
-	};
-
-
-	UINT size_index_list = ARRAYSIZE(index_list);
-
-	// indexBuffer - pointer to list and the size of the list for loading 
-	m_ib = GraphicsEngine::get()->createIndexBuffer(index_list, size_index_list);
 
 
 	void* shader_byte_code = nullptr;
@@ -282,8 +191,7 @@ void AppWindow::onCreate()
 	// create VertexShader
 	m_vs=GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
 
-	// vertex_Buffer Loading
-	m_vb = GraphicsEngine::get()->createVertexBuffer(vertex_list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+
 
 	// when create resources is finished -> release memory Buffer
 	GraphicsEngine::get()->releaseCompiledShader();
@@ -296,10 +204,6 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->releaseCompiledShader();
 
 
-	/*
-		- Create constant buffer from GraphicsEngine. -> Create instance of ConstantBuffer
-		- load parameter time from structure constant and its size
-	*/
 
 	constant cc;
 	cc.m_time = 0;
@@ -338,15 +242,21 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setTextureShader(m_ts);
 
 	// set the vertices of the triangle to draw
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
+	//GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_mesh->getVertex());
+
 
 	//set the indices of the triangle to draw
-	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib);
+	//GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_mesh->getIndex());
+
 
 
 
 	// finally draw triangles
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
+	//GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_mesh->getIndex()->getSizeIndexList(), 0, 0);
+
 
 	UpdateGui();
 
@@ -410,8 +320,8 @@ void AppWindow::onDestroy()
 	// call onDestroy in Window
 	Window::onDestroy();
 
-	delete m_vb;
-	delete m_ib;
+	//delete m_vb;
+	delete m_mesh;
 	delete m_cb;
 	delete m_swap_chain;
 	delete m_input;

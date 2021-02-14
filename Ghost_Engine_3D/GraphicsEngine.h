@@ -38,6 +38,7 @@ class VertexShader;
 class PixelShader;
 class Input;
 class TextureShader;
+class MeshModel;
 
 class GraphicsEngine
 {
@@ -59,11 +60,17 @@ public:
 	PixelShader* createPixelShader(const void* shader_byte_code, size_t byte_code_size);
 	Input* createInput();
 	TextureShader* createTextureShader(const wchar_t* file);
+	MeshModel* createMeshModel(const wchar_t* file);
+
+	
 
 	// ImGui
 	void InitGui(HWND hwnd);
 
 public:
+
+	void setMeshModel();
+	void getMeshModelShader(void** byte_code, size_t* size);
 
 	bool compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 	bool compilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
@@ -89,6 +96,9 @@ private:
 private:
 	ID3DBlob * m_blob = nullptr;		// ouput of compiler:  data structure in which we replaced the buffer with the compiled shader and its size in mememory
 
+	unsigned char m_mesh_byte[1024];
+	size_t m_mesh_size = 0;
+
 private:
 
 	friend class SwapChain;
@@ -99,5 +109,6 @@ private:
 	friend class PixelShader;
 	friend class Input;
 	friend class TextureShader;
+	friend class MeshModel;
 };
 

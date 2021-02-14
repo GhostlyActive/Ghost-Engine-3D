@@ -72,6 +72,7 @@ private:
 	IndexBuffer* m_ib;
 	Input* m_input;
 	TextureShader* m_ts;
+	MeshModel* m_mesh;
 
 private:
 	long m_old_delta;
