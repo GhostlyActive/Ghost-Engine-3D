@@ -44,6 +44,3 @@ Ghost_Engine_3D/x64/Debug/TextureShader.obj
 *.db-wal
 *.opendb
 *.obj
-*.log
-*.tlog
-*.pdb
