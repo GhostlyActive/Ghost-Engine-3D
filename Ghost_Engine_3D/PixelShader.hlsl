@@ -37,6 +37,7 @@ struct PS_INPUT
 {
 	float4 position: SV_POSITION;
 	float2 texcoord: TEXCOORD;
+	float3 normal: NORMAL;
 };
 
 cbuffer constant: register(b0)
@@ -45,16 +46,28 @@ cbuffer constant: register(b0)
 	row_major float4x4 m_view;
 	row_major float4x4 m_proj;
 	unsigned int m_time;
+	float3 ambientColor;
+	float ambientPower;
 };
 
 float4 psmain(PS_INPUT input) : SV_TARGET
 {
-	float4 textureColor;
 
-	textureColor = shaderTexture.Sample(SampleType, input.texcoord * 0.5);
 
-	return textureColor;
+	float3 sampleColor = shaderTexture.Sample(SampleType, input.texcoord * 0.5);
 
-	//return float4(lerp(input.color, input.color1, (float)((sin((float)(m_time / (float)500.0f)) + 1.0f) / 2.0f)),1.0f);
-	//return float4(0.8f,0.9f, 0.4f, 1.0f);
-}
+	float3 ambientLight = ambientColor * ambientPower;
+
+	float3 finalColor = sampleColor * ambientLight;
+
+
+return float4(finalColor, 1.0);
+
+
+	//float4 textureColor;
+
+	//textureColor = shaderTexture.Sample(SampleType, input.texcoord * 0.5);
+
+	//return textureColor;
+
+};

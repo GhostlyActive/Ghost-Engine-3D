@@ -88,7 +88,7 @@ private:
 	// position of the camera
 	float m_posX = 1.0f;
 	float m_posY = 0.0f;
-	float m_posZ = -2.0f;
+	float m_posZ = -12.0f;
 
 	float m_rotX = 0.0f;
 	float m_rotY = 0.0f;

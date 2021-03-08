@@ -5,7 +5,7 @@
 Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Window, Swap Chain, Vertex Buffer, Shader, Index Buffer, Transform) and the DirectX book ([Introduction to 3D GAME PROGRAMMING WITH DIRECTX 11](https://files.xray-engine.org/boox/3d_game_programming_with_DirectX11.pdf))
 <br>
 <br> 
-<b>Already done: </b> Import 3D Objects <.obj>, Texture, Smooth Camera Movement, Input System (Keyboard and Mouse), Resizing Window, Depth Buffer, GUI System (ImGui), (Project Summary PDF) . . .
+<b>Already done: </b> Import 3D Objects <.obj>, Texture, Smooth Camera Movement, Input System (Keyboard and Mouse), Ambient Light, Resizing Window, Depth Buffer, GUI System (ImGui), (Project Summary PDF Alpha) . . .
 <br>
 <br>
 <b>Current work: </b>Rendering a Terrain, Bitmap, Lighting, Collision, Sound System, GUI, Storage System,  creating a scene and automate the import of multiple objects . . . 

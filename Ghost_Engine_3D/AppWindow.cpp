@@ -31,7 +31,6 @@
 #include "Vector3D.h"
 #include "Vector2D.h"
 #include "Matrix4x4.h"
-#include "MeshModel.h"
 
 #include "Libs/ImGui/imgui.h"
 #include "Libs/ImGui/imgui_impl_win32.h"
@@ -56,6 +55,9 @@ struct constant
 	Matrix4x4 m_view;
 	Matrix4x4 m_proj;
 	unsigned int m_time;	// Constant Buffer timer
+	Vector3D ambientColor;
+	float ambientPower;
+	
 };
 
 
@@ -74,14 +76,19 @@ void AppWindow::updateTransform()
 		m_delta_pos = 0;
 
 
-	// translation matrix
-	Matrix4x4 temp;
-
 	m_delta_scale += m_delta_time / 0.6f;	// last value makes the movement slower. Like 1 unit in x seconds
 
 
+	// ambient light
+	cc.ambientColor = Vector3D(1.0f, 1.0f, 1.0f);
+	cc.ambientPower = 1.0f;
 
-	cc.m_world.setIdentity();
+
+	// update camera
+	
+	// translation matrix
+	Matrix4x4 temp;
+
 
 	// camera matrix
 	Matrix4x4 world_cam;
@@ -112,6 +119,12 @@ void AppWindow::updateTransform()
 	float width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
 
 	cc.m_proj.setPerspectiveFovLH(1.6f, (width / height), 0.1f, 100.0f);
+
+
+
+
+
+	cc.m_world.setIdentity();
 
 
 
@@ -172,7 +185,9 @@ void AppWindow::onCreate()
 
 	// create Texture from file 
 	m_ts = GraphicsEngine::get()->createTextureShader(L"Graphics\\Textures\\marmor2.jpg");
+	
 
+	// create mesh from file
 	m_mesh = GraphicsEngine::get()->createMeshModel(L"Graphics\\Objects\\temple.obj");
 
 
@@ -190,9 +205,6 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 	// create VertexShader
 	m_vs=GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
-
-
-
 	// when create resources is finished -> release memory Buffer
 	GraphicsEngine::get()->releaseCompiledShader();
 
@@ -204,9 +216,8 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->releaseCompiledShader();
 
 
-
 	constant cc;
-	cc.m_time = 0;
+	cc.m_time = 0.0f;
 
 	m_cb = GraphicsEngine::get()->createConstantBuffer(&cc, sizeof(constant));
 }
@@ -217,8 +228,7 @@ void AppWindow::onUpdate()
 	Window::onUpdate();
 
 	// clear the render target
-	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
-		0.0f, 0.0f, 0.0f, 1);
+	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0.0f, 0.0f, 0.0f, 1);
 
 	// set viewport of render target in which we have to draw 
 	RECT rc = this->getClientWindowRect();
@@ -242,19 +252,16 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setTextureShader(m_ts);
 
 	// set the vertices of the triangle to draw
-	//GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_mesh->getVertex());
 
 
 	//set the indices of the triangle to draw
-	//GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_mesh->getIndex());
 
 
 
 
 	// finally draw triangles
-	//GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(), 0, 0);
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_mesh->getIndex()->getSizeIndexList(), 0, 0);
 
 
@@ -320,7 +327,6 @@ void AppWindow::onDestroy()
 	// call onDestroy in Window
 	Window::onDestroy();
 
-	//delete m_vb;
 	delete m_mesh;
 	delete m_cb;
 	delete m_swap_chain;

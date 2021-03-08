@@ -93,15 +93,17 @@ MeshModel::MeshModel(const wchar_t* file)
 					tinyobj::real_t vz = attrib.vertices[3 * idx.vertex_index + 2];
 
 					// vertex normal
-					/*
-					
-					*/
+					tinyobj::real_t nx = attrib.normals[3 * idx.normal_index + 0];
+					tinyobj::real_t ny = attrib.normals[3 * idx.normal_index + 1];
+					tinyobj::real_t nz = attrib.normals[3 * idx.normal_index + 2];
 
+					
 					// texture coordinates
 					tinyobj::real_t tx = attrib.texcoords[2 * idx.texcoord_index + 0];
 					tinyobj::real_t ty = attrib.texcoords[2 * idx.texcoord_index + 1];
 
-					VertexMesh V(Vector3D(vx, vy, vz), Vector2D(tx, ty));
+					// VertexMesh(position, texcoord, normal)
+					VertexMesh V(Vector3D(vx, vy, vz), Vector2D(tx, ty), Vector3D(nx, ny, nz));
 					// add to the Vector list
 					verticeList.push_back(V);
 

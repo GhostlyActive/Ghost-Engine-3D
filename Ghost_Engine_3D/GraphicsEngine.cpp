@@ -56,7 +56,7 @@
 		  const D3D_FEATURE_LEVEL *pFeatureLevels,
 		  UINT                    FeatureLevels,
 		  UINT                    SDKVersion,
-		  ID3D11Device            **ppDevice,						* m_d3d_device	- - -> &m_d3d_device	- output
+		  ID3D11Device            **ppDevice,						*m_d3d_device	- - -> &m_d3d_device	- output
 		  D3D_FEATURE_LEVEL       *pFeatureLevel,					m_feature_level - - -> &m_feature_level	- output
 		  ID3D11DeviceContext     **ppImmediateContext				* m_imm_context - - -> &m_imm_context	- output
 		);
@@ -75,12 +75,14 @@ GraphicsEngine::GraphicsEngine()
 		D3D_DRIVER_TYPE_WARP,
 		D3D_DRIVER_TYPE_REFERENCE
 	};
+
 	UINT num_driver_types = ARRAYSIZE(driver_types);
 
 	D3D_FEATURE_LEVEL feature_levels[] =
 	{
 		D3D_FEATURE_LEVEL_11_0
 	};
+
 	UINT num_feature_levels = ARRAYSIZE(feature_levels);
 
 	HRESULT res = 0;
@@ -93,6 +95,7 @@ GraphicsEngine::GraphicsEngine()
 			break;
 		++driver_type_index;
 	}
+
 	if (FAILED(res))
 	{
 		throw std::exception("Create Device was not successful");
@@ -100,7 +103,6 @@ GraphicsEngine::GraphicsEngine()
 
 	//instance of DeviceContext where we pass (immediate Context)-> m_imm_context of class ID3D11DeviceContext*
 	m_imm_device_context = new DeviceContext(m_imm_context);
-
 
 	/*
 		 - To create a SwapChain -> call the dxgi factory, from which we call the SwapChain
@@ -116,6 +118,19 @@ GraphicsEngine::GraphicsEngine()
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 }
 
+
+/*
+	 this will take it to the stack and will called once in initialization
+	 each time this get function will always get the same instance -> no more instances of this class will be created at runtime
+*/
+
+GraphicsEngine* GraphicsEngine::get()
+{
+	static GraphicsEngine engine;
+	return &engine;
+}
+
+
 void GraphicsEngine::InitGui(HWND hwnd)
 {
 	IMGUI_CHECKVERSION();
@@ -124,18 +139,6 @@ void GraphicsEngine::InitGui(HWND hwnd)
 	ImGui_ImplWin32_Init(hwnd);
 	ImGui_ImplDX11_Init(m_d3d_device, m_imm_context);
 	ImGui::StyleColorsClassic();
-
-	/*
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0;
-
-
-	GraphicsEngine::get()->compileVertexShader(L"MeshModelShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
-	::memcpy(m_mesh_byte, shader_byte_code, size_shader);
-	m_mesh_size = size_shader;
-	GraphicsEngine::get()->releaseCompiledShader();
-
-	*/
 }
 
 
@@ -351,16 +354,4 @@ GraphicsEngine::~GraphicsEngine()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-}
-
-
-/*
-	 this will take it to the stack and will called once in initialization
-	 each time this get function will always get the same instance -> no more instances of this class will be created at runtime
-*/
-
-GraphicsEngine* GraphicsEngine::get()
-{
-	static GraphicsEngine engine;
-	return &engine;
 }

@@ -35,12 +35,14 @@ struct VS_INPUT
 {
 	float4 position: POSITION;
 	float2 texcoord: TEXCOORD;
+	float3 normal: NORMAL;
 };
 
 struct VS_OUTPUT
 {
 	float4 position: SV_POSITION;
 	float2 texcoord: TEXCOORD;
+	float3 normal: NORMAL;
 };
 
 // adding Data Structure passed into ConstantBuffer
@@ -50,6 +52,8 @@ cbuffer constant: register(b0)
 	row_major float4x4 m_view;
 	row_major float4x4 m_proj;
 	unsigned int m_time;
+	float3 ambientColor;
+	float ambientPower;
 };
 
 
@@ -69,7 +73,8 @@ VS_OUTPUT vsmain(VS_INPUT input)
 	// screen space
 	output.position = mul(output.position, m_proj);
 
-
 	output.texcoord = input.texcoord;
+	output.normal = input.normal;
+
 	return output;
 }

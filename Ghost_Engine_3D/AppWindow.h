@@ -39,6 +39,8 @@
 #include "PixelShader.h"
 #include "Input.h"
 #include "TextureShader.h"
+#include "MeshModel.h"
+
 
 class AppWindow: public Window
 {
@@ -65,11 +67,9 @@ public:
 
 private:
 	SwapChain* m_swap_chain;
-	VertexBuffer* m_vb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
-	IndexBuffer* m_ib;
 	Input* m_input;
 	TextureShader* m_ts;
 	MeshModel* m_mesh;

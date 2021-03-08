@@ -33,15 +33,15 @@
 class VertexMesh
 {
 public:
-	VertexMesh() :m_Pos(), m_Tex()
+	VertexMesh() :m_Pos(), m_Tex(), m_Norm()
 	{
 	}
 
-	VertexMesh(Vector3D pos, Vector2D tex) :m_Pos(pos), m_Tex(tex)
+	VertexMesh(Vector3D pos, Vector2D tex, Vector3D norm) :m_Pos(pos), m_Tex(tex), m_Norm(norm)
 	{
 	}
 
-	VertexMesh(const VertexMesh& vertex) :m_Pos(vertex.m_Pos), m_Tex(vertex.m_Tex)
+	VertexMesh(const VertexMesh& mesh) :m_Pos(mesh.m_Pos), m_Tex(mesh.m_Tex), m_Norm(mesh.m_Norm)
 	{
 	}
 
@@ -52,4 +52,5 @@ public:
 public:
 	Vector3D m_Pos;
 	Vector2D m_Tex;
+	Vector3D m_Norm;
 };

@@ -144,8 +144,8 @@ SwapChain::SwapChain(HWND hwnd, UINT width, UINT height)
 void SwapChain::Swap_Resize(UINT width, UINT height)
 {
 	// release the views
-	m_rtv->Release();
-	m_dsv->Release();
+	if(m_rtv) m_rtv->Release();
+	if(m_dsv) m_dsv->Release();
 
 	m_swap_chain->ResizeBuffers(0, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 

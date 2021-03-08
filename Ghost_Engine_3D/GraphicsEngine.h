@@ -51,6 +51,9 @@ public:
 
 public:
 
+	// GraphicsEngine class should be a Singleton class. Static method that return a pointer to GraphicsEngine instance
+	static GraphicsEngine* get();
+
 	SwapChain* createSwapChain(HWND hwnd, UINT width, UINT height);
 	DeviceContext* getImmediateDeviceContext();
 	VertexBuffer* createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, size_t size_byte_shader);
@@ -61,8 +64,6 @@ public:
 	Input* createInput();
 	TextureShader* createTextureShader(const wchar_t* file);
 	MeshModel* createMeshModel(const wchar_t* file);
-
-	
 
 	// ImGui
 	void InitGui(HWND hwnd);
@@ -77,26 +78,28 @@ public:
 
 	void releaseCompiledShader();
 
-public:
-
-	//GraphicsEngine class should be a Singleton class. Static method that return a pointer to GraphicsEngine instance
-	static GraphicsEngine* get();
-
 private:
-	DeviceContext* m_imm_device_context = nullptr;
-private:
+
+	// DirectX device pointer
 	ID3D11Device* m_d3d_device = nullptr;
+	// feature level 
 	D3D_FEATURE_LEVEL m_feature_level;
+	// immediate device context pointer
+	ID3D11DeviceContext* m_imm_context = nullptr;
+
+	// stored context instance
+	DeviceContext* m_imm_device_context = nullptr;
+
 private:
+
 	IDXGIDevice* m_dxgi_device = nullptr;
 	IDXGIAdapter* m_dxgi_adapter = nullptr;
 	IDXGIFactory* m_dxgi_factory = nullptr;
-	ID3D11DeviceContext* m_imm_context = nullptr;
 
 private:
 	ID3DBlob * m_blob = nullptr;		// ouput of compiler:  data structure in which we replaced the buffer with the compiled shader and its size in mememory
 
-	unsigned char m_mesh_byte[1024];
+	unsigned char m_mesh_byte[1024] = {0};
 	size_t m_mesh_size = 0;
 
 private:
