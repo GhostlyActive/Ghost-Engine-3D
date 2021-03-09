@@ -44,3 +44,7 @@ Ghost_Engine_3D/x64/Debug/TextureShader.obj
 *.db-wal
 *.opendb
 *.obj
+*.log
+Ghost_Engine_3D/x64/Release/DirectXGame.tlog/CL.command.1.tlog
+*.tlog
+*.pdb

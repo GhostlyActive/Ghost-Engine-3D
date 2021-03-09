@@ -43,33 +43,14 @@ struct vertex
 };
 
 
-/*
-	- DirectX handles constant data in VRAM in 16 Bytes, when the structure is above -> modified to be multiple of 16
-		__declspec(align(16)) make it works.
-*/
-
-__declspec(align(16))
-struct constant
-{
-	Matrix4x4 m_world;
-	Matrix4x4 m_view;
-	Matrix4x4 m_proj;
-	unsigned int m_time;	// Constant Buffer timer
-	Vector3D ambientColor;
-	float ambientPower;
-	
-};
-
-
 AppWindow::AppWindow()
 {
 }
 
 void AppWindow::updateTransform()
 {
-	// getTickCount is a Windows function. Output the time since the start of the system in milliseconds
-	constant cc;
-	cc.m_time = ::GetTickCount64();
+	// getTickCount is a Windows function. Output the time since the start of the system in milliseconds	
+	m_ct->m_time = ::GetTickCount64();
 
 	m_delta_pos += m_delta_time / 10.0f;	// last value makes the movement slower. Like 1 unit in x seconds
 	if (m_delta_pos > 1.0f)
@@ -79,15 +60,19 @@ void AppWindow::updateTransform()
 	m_delta_scale += m_delta_time / 0.6f;	// last value makes the movement slower. Like 1 unit in x seconds
 
 
-	// ambient light
-	cc.ambientColor = Vector3D(1.0f, 1.0f, 1.0f);
-	cc.ambientPower = 1.0f;
-
-
 	// update camera
 	
 	// translation matrix
 	Matrix4x4 temp;
+
+	// get light direction vector
+	Matrix4x4 light;
+	light.setIdentity();
+	light.setRotationY(m_light_rotation);
+
+	//m_light_rotation += 0.6f * m_delta_time;
+
+	m_ct->m_vectorLight = light.getZDirection();
 
 
 	// camera matrix
@@ -113,23 +98,19 @@ void AppWindow::updateTransform()
 	world_cam.inverse();
 
 	// fill constant buffer with world matrix of cube which is identity matrix
-	cc.m_view = world_cam;
+	m_ct->m_view = world_cam;
 
 	float height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
 	float width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
 
-	cc.m_proj.setPerspectiveFovLH(1.6f, (width / height), 0.1f, 100.0f);
+	m_ct->m_proj.setPerspectiveFovLH(1.6f, (width / height), 0.1f, 100.0f);
 
 
-
-
-
-	cc.m_world.setIdentity();
-
+	m_ct->m_world.setIdentity();
 
 
 	// pass it to the Constant buffer update function
-	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), m_ct);
 }
 
 
@@ -152,6 +133,13 @@ void AppWindow::UpdateGui()
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("Translation", CameraTranslation, 0.1f, -10.0f, 10.0f);
 	m_input->setTransform(CameraTranslation);
+
+	ImGui::DragFloat3("Ambient Light", &m_ct->ambientColor.m_x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Ambient Alpha", &m_ct->ambientPower, 0.01f, 0.0f, 1.0f);
+	ImGui::End();
+
+	ImGui::Begin("Light");
+	ImGui::DragFloat("Light Direction", &m_light_rotation, 0.01f, -3.141f, 3.141f);
 
 
 	ImGui::End();
@@ -216,10 +204,14 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->releaseCompiledShader();
 
 
-	constant cc;
-	cc.m_time = 0.0f;
+	m_ct = new ConstantType;
+	m_ct->m_time = 0.0f;
 
-	m_cb = GraphicsEngine::get()->createConstantBuffer(&cc, sizeof(constant));
+	// ambient light
+	m_ct->ambientColor = Vector3D(1.0f, 1.0f, 1.0f);
+	m_ct->ambientPower = 1.0f;
+
+	m_cb = GraphicsEngine::get()->createConstantBuffer(m_ct, sizeof(ConstantType));
 }
 
 void AppWindow::onUpdate()
@@ -334,4 +326,5 @@ void AppWindow::onDestroy()
 	delete m_vs;
 	delete m_ps;
 	delete m_ts;
+	delete m_ct;
 }

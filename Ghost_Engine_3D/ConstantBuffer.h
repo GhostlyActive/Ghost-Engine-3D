@@ -29,6 +29,10 @@
 #pragma once
 #include <d3d11.h>
 
+#include "Vector3D.h"
+#include "Vector2D.h"
+#include "Matrix4x4.h"
+
 class DeviceContext;
 
 class ConstantBuffer
@@ -46,4 +50,22 @@ private:
 private:
 
 	friend class DeviceContext;
+};
+
+
+/*
+	- DirectX handles constant data in VRAM in 16 Bytes, when the structure is above -> modified to be multiple of 16
+		__declspec(align(16)) make it works.
+*/
+
+__declspec(align(16))
+struct ConstantType
+{
+	Matrix4x4 m_world;
+	Matrix4x4 m_view;
+	Matrix4x4 m_proj;
+	unsigned int m_time;
+	Vector3D ambientColor;
+	float ambientPower;
+	Vector3D m_vectorLight;
 };

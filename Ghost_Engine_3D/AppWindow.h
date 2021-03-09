@@ -73,6 +73,7 @@ private:
 	Input* m_input;
 	TextureShader* m_ts;
 	MeshModel* m_mesh;
+	ConstantType* m_ct;
 
 private:
 	long m_old_delta;
@@ -82,5 +83,7 @@ private:
 	float m_delta_pos;
 	float m_delta_scale;
 	float m_delta_rot;
+
+	float m_light_rotation;
 };
 

@@ -25,6 +25,7 @@
 */
 
 #pragma once
+#include "Vector3D.h"
 
 class Vector4D
 {
@@ -40,10 +41,16 @@ public:
 	{
 	}
 
-	// pass Vector3D Object by reference
+
+	// pass Vector4D Object by reference
 	Vector4D(const Vector4D& vector) :m_x(vector.m_x), m_y(vector.m_y), m_z(vector.m_z), m_s(vector.m_s)
 	{
 	}
+
+	Vector4D(const Vector3D& vector) :m_x(vector.m_x), m_y(vector.m_y), m_z(vector.m_z), m_s(1.0f)
+	{
+	}
+
 
 	// https://docs.microsoft.com/en-us/windows/win32/api/directxmath/nf-directxmath-xmvector4cross
 	// 4d Cross Product

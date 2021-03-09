@@ -48,6 +48,8 @@ cbuffer constant: register(b0)
 	unsigned int m_time;
 	float3 ambientColor;
 	float ambientPower;
+	float3 m_vectorLight;
+
 };
 
 float4 psmain(PS_INPUT input) : SV_TARGET
@@ -57,8 +59,17 @@ float4 psmain(PS_INPUT input) : SV_TARGET
 	float3 sampleColor = shaderTexture.Sample(SampleType, input.texcoord * 0.5);
 
 	float3 ambientLight = ambientColor * ambientPower;
+	float3 ambient2Diffuse = ambientLight;
 
-	float3 finalColor = sampleColor * ambientLight;
+
+	float3 diffuseLightIntense = max(dot(m_vectorLight.xyz, input.normal), 0); 
+	float3 diffuseLight = diffuseLightIntense * 2;
+
+	ambient2Diffuse += diffuseLight;
+
+
+
+	float3 finalColor = sampleColor * ambient2Diffuse;
 
 
 return float4(finalColor, 1.0);

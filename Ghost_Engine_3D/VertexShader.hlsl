@@ -54,6 +54,8 @@ cbuffer constant: register(b0)
 	unsigned int m_time;
 	float3 ambientColor;
 	float ambientPower;
+	float3 m_vectorLight;
+
 };
 
 
