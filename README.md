@@ -2,7 +2,7 @@
 
 ### Creating a 3D Game Engine from Scratch using Windows API (DirectX).
 
-Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Window, Swap Chain, Vertex Buffer, Shader, Index Buffer, Transform) and the DirectX book ([Introduction to 3D GAME PROGRAMMING WITH DIRECTX 11](https://files.xray-engine.org/boox/3d_game_programming_with_DirectX11.pdf))
+Primary source up to initialisation: [PardCode](https://github.com/PardCode) (Window, Swap Chain, Vertex Buffer, Shader, Index Buffer, Transform) and the DirectX book ([Introduction to 3D GAME PROGRAMMING WITH DIRECTX 11](https://www.profajaypashankar.com/wp-content/uploads/2018/09/3d_game_programming_with_DirectX11.pdf))
 <br>
 <br> 
 <b>Already done: </b> Import 3D Objects <.obj>, Texture, Smooth Camera Movement, Input System (Keyboard and Mouse), Lighting, Ambient Light, Resizing Window, Depth Buffer, GUI System (ImGui), (Project Summary PDF Alpha) . . .
